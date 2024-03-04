@@ -24,6 +24,9 @@ public class AnimalWalking : AnimalState
     {
         if (controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
             RandomWalkTarget();
+
+        if (controller.CurrentLife <= controller.AnimalDNA.Chromosomes[2] * .5f)
+            controller.ChangeState(new AnimalLookingForFood(controller));
     }
 
     public override void OnStateExit()

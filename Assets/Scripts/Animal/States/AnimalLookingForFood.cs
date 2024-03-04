@@ -27,6 +27,8 @@ public class AnimalLookingForFood : AnimalState
             _target.gameObject.GetComponent<FoodObject>().HasBeenEaten();
             RandomWalkTarget();
             timer = 0;
+            controller.ResetLife();
+            controller.ChangeState(new AnimalWalking(controller));
         }
     }
 

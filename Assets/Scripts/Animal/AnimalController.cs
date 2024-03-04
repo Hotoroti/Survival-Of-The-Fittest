@@ -4,24 +4,22 @@ using UnityEngine.AI;
 [RequireComponent(typeof(AnimalDNA))]
 public class AnimalController : MonoBehaviour
 {
-    private AnimalDNA _animalDNA;
-
     private AnimalState _currentState;
-
-    private float _life;
+    public float CurrentLife { get; private set; }
+    public AnimalDNA AnimalDNA { get; private set; }
 
     [HideInInspector] public NavMeshAgent Agent;
 
     private void Start()
     {
-        _animalDNA = GetComponent<AnimalDNA>();
+        AnimalDNA = GetComponent<AnimalDNA>();
         Agent = GetComponent<NavMeshAgent>();
 
-        Agent.speed = _animalDNA.Chromosomes[0];
-        transform.localScale *= _animalDNA.Chromosomes[1];
-        _life = _animalDNA.Chromosomes[2];
+        Agent.speed = AnimalDNA.Chromosomes[0];
+        transform.localScale *= AnimalDNA.Chromosomes[1];
+        CurrentLife = AnimalDNA.Chromosomes[2];
 
-        _currentState = new AnimalLookingForFood(this);
+        _currentState = new AnimalWalking(this);
 
         _currentState.OnStateEnter();
     }
@@ -29,6 +27,9 @@ public class AnimalController : MonoBehaviour
     private void FixedUpdate()
     {
         _currentState.OnStateUpdate();
+        CurrentLife -= Time.fixedDeltaTime;
+        if (CurrentLife <= 0)
+            Destroy(gameObject);
     }
 
     public void ChangeState(AnimalState state)
@@ -38,11 +39,21 @@ public class AnimalController : MonoBehaviour
         _currentState.OnStateEnter();
     }
 
+    public void ResetLife()
+    {
+        CurrentLife = AnimalDNA.Chromosomes[2];
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
             ChangeState(new AnimalWalking(this));
+        }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            ChangeState(new AnimalLookingForFood(this));
         }
     }
 }
