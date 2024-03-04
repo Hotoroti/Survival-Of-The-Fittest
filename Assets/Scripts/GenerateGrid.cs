@@ -16,9 +16,9 @@ public class GenerateGrid : MonoBehaviour
                 if (x == 0 || z == 0 || x == _sizeX - 1 || z == _sizeZ - 1)
                     continue;
                 GridCells.Add(Instantiate(_gridObj, new Vector3(x * _spacing, 0, z * _spacing), Quaternion.identity));
-
-
             }
         }
+
+        StartCoroutine(FoodManager.Instance.GenerateFood());
     }
 }
