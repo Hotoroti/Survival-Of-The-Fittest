@@ -64,4 +64,13 @@ public class FoodManager : MonoBehaviour
             food.IsFood = false;
         }
     }
+
+    [ContextMenu("Show all food")]
+    public void ShowAllFood()
+    {
+        foreach (var food in DeactivatedFoods)
+        {
+            food.IsFood = true;
+        }
+    }
 }

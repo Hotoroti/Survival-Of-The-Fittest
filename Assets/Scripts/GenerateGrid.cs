@@ -7,18 +7,26 @@ public class GenerateGrid : MonoBehaviour
     [SerializeField] private GameObject _gridObj;
 
     [HideInInspector] public List<GameObject> GridCells = new List<GameObject>();
+
+    public static GenerateGrid Instance;
+
+    private void Awake()
+    {
+        if (Instance != null)
+            Destroy(Instance);
+        else
+            Instance = this;
+    }
+
     private void Start()
     {
         for (int x = 0; x < _sizeX; x++)
         {
             for (int z = 0; z < _sizeZ; z++)
             {
-                if (x == 0 || z == 0 || x == _sizeX - 1 || z == _sizeZ - 1)
-                    continue;
                 GridCells.Add(Instantiate(_gridObj, new Vector3(x * _spacing, 0, z * _spacing), Quaternion.identity));
             }
         }
-
         StartCoroutine(FoodManager.Instance.GenerateFood());
     }
 }
