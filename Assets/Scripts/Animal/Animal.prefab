@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3041468427578061131}
   - component: {fileID: 5302913307179984797}
+  - component: {fileID: -4878330199470332713}
+  - component: {fileID: 5135801410441908453}
   - component: {fileID: 875975955049721562}
-  - component: {fileID: 304591724235285722}
   m_Layer: 0
   m_Name: Animal
   m_TagString: Untagged
@@ -57,6 +58,34 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-4878330199470332713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6761660954548527424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd328f2ebbb42841b51927c2388deb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 5
+  _size: 4
+  _life: 50
+  Chromosomes: []
+--- !u!114 &5135801410441908453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6761660954548527424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb8081dc6527844791b5d0827216d86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &875975955049721562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,19 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 487741b8cd49a274c89668803fd66bb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &304591724235285722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6761660954548527424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed41b52e7b650b443af46938f55d984c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _eatingTime: 5
 --- !u!1 &8668882594116439143
 GameObject:
   m_ObjectHideFlags: 0

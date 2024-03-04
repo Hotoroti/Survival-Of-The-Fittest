@@ -1,34 +1,21 @@
 using UnityEngine;
-using UnityEngine.AI;
 
-public class AnimalLookingForFood : MonoBehaviour
+public class AnimalLookingForFood : AnimalState
 {
-    [SerializeField] private int _eatingTime;
+    private int _eatingTime = 5;
 
     private float timer;
     private Transform _target;
 
-    private NavMeshAgent _agent;
-
-    private void Start()
+    public AnimalLookingForFood(AnimalController animalController) : base(animalController)
     {
-        _agent = GetComponent<NavMeshAgent>();
-        RandomWalkTarget();
-    }
-
-    private void FixedUpdate()
-    {
-        if (_agent.remainingDistance <= _agent.stoppingDistance)
-            Eating();
-
-
     }
 
     private void RandomWalkTarget()
     {
         int iPoint = Random.Range(0, FoodManager.Instance.ActivateFoods.Count);
         _target = FoodManager.Instance.ActivateFoods[iPoint].transform;
-        _agent.SetDestination(_target.transform.position);
+        controller.Agent.SetDestination(_target.transform.position);
     }
 
     private void Eating()
@@ -41,5 +28,21 @@ public class AnimalLookingForFood : MonoBehaviour
             RandomWalkTarget();
             timer = 0;
         }
+    }
+
+    public override void OnStateEnter()
+    {
+        RandomWalkTarget();
+    }
+
+    public override void OnStateUpdate()
+    {
+        if (controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
+            Eating();
+    }
+
+    public override void OnStateExit()
+    {
+        _target = null;
     }
 }
