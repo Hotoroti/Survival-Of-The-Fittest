@@ -22,11 +22,12 @@ public class GenerateGrid : MonoBehaviour
 
     private void Start()
     {
+        GameObject parent = new GameObject("GridParent");
         for (int x = 0; x < _sizeX; x++)
         {
             for (int z = 0; z < _sizeZ; z++)
             {
-                GridCells.Add(Instantiate(_gridObj, new Vector3(x * _spacing, 0, z * _spacing), Quaternion.identity));
+                GridCells.Add(Instantiate(_gridObj, new Vector3(x * _spacing, 0, z * _spacing), Quaternion.identity, parent.transform));
             }
         }
         StartCoroutine(FoodManager.Instance.GenerateFood());
