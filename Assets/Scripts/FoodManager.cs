@@ -33,20 +33,23 @@ public class FoodManager : MonoBehaviour
 
         ActivateFood();
         DeactivateFood();
+
+        Instantiate(GenerateGrid.Instance.Animal, Vector3.zero, Quaternion.identity);
         StopCoroutine(GenerateFood());
     }
 
     public void FoodHasBeenEaten(FoodObject food)
     {
+        food.IsFood = false;
+
         ActivateFoods.Remove(food);
         DeactivatedFoods.Add(food);
 
         int iFood = Random.Range(0, DeactivatedFoods.Count);
         ActivateFoods.Add(DeactivatedFoods[iFood]);
         DeactivatedFoods.Remove(DeactivatedFoods[iFood]);
-
         ActivateFood();
-        DeactivateFood();
+        //ActivateFoods[iFood].IsFood = true;
     }
 
     public void ActivateFood()
