@@ -69,10 +69,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd328f2ebbb42841b51927c2388deb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
-  _size: 4
-  _life: 50
-  Chromosomes: []
+  _minSpeed: 1
+  _maxSpeed: 10
+  _minSize: 1
+  _maxSize: 4
+  _minLife: 10
+  _maxLife: 50
+  Chromosomes: 
 --- !u!114 &5135801410441908453
 MonoBehaviour:
   m_ObjectHideFlags: 0

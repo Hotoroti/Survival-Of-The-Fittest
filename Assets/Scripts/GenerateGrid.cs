@@ -6,8 +6,6 @@ public class GenerateGrid : MonoBehaviour
     [SerializeField] private int _sizeX, _sizeZ, _spacing;
     [SerializeField] private GameObject _gridObj;
 
-    [SerializeField] public GameObject Animal;
-
     [HideInInspector] public List<GameObject> GridCells = new List<GameObject>();
 
     public static GenerateGrid Instance;

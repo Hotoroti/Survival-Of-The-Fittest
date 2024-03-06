@@ -3,11 +3,22 @@ using UnityEngine;
 
 public class AnimalDNA : MonoBehaviour
 {
-    [SerializeField] private float _speed, _size, _life;
+    [SerializeField] private float _minSpeed, _maxSpeed, _minSize, _maxSize, _minLife, _maxLife;
+    private float _speed, _size, _life;
     [HideInInspector] public List<float> Chromosomes;
 
     private void Awake()
     {
+        if (AnimalManager.Instance.Generation <= 1)
+        {
+            _speed = (int)Random.Range(_minSpeed, _maxSpeed);
+            _size = (int)Random.Range(_minSize, _maxSize);
+            _life = (int)Random.Range(_minLife, _maxLife);
+        }
+        else
+        {
+            Chromosomes = AnimalManager.Instance.BestOfNewestGeneration.Chromosomes;
+        }
         //Chromosome 0 = speed
         //Chromosome 1 = _size
         //Chromosome 2 = _life

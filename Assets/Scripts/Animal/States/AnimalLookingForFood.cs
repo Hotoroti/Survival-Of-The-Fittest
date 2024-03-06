@@ -20,15 +20,18 @@ public class AnimalLookingForFood : AnimalState
 
     private void Eating()
     {
-        timer += Time.fixedDeltaTime;
-
-        if (timer >= _eatingTime)
+        if (FoodManager.Instance.ActivateFoods.Count != 0)
         {
-            _target.gameObject.GetComponent<FoodObject>().HasBeenEaten();
-            RandomWalkTarget();
-            timer = 0;
-            controller.ResetLife();
-            controller.ChangeState(new AnimalWalking(controller));
+            timer += Time.fixedDeltaTime;
+
+            if (timer >= _eatingTime)
+            {
+                _target.gameObject.GetComponent<FoodObject>().HasBeenEaten();
+                RandomWalkTarget();
+                timer = 0;
+                controller.ResetLife();
+                controller.ChangeState(new AnimalWalking(controller));
+            }
         }
     }
 
@@ -39,8 +42,11 @@ public class AnimalLookingForFood : AnimalState
 
     public override void OnStateUpdate()
     {
-        if (controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
+        if (FoodManager.Instance.ActivateFoods.Count != 0 && controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
             Eating();
+
+        if (FoodManager.Instance.ActivateFoods.Count == 0)
+            controller.ChangeState(new AnimalWalking(controller));
     }
 
     public override void OnStateExit()

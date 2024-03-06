@@ -5,6 +5,7 @@ using UnityEngine;
 public class FoodManager : MonoBehaviour
 {
     [SerializeField] private int _maxActivateFoodCount;
+    [SerializeField] private bool _generateNewFood;
 
     public List<FoodObject> ActivateFoods = new List<FoodObject>();
     public List<FoodObject> DeactivatedFoods = new List<FoodObject>();
@@ -34,7 +35,7 @@ public class FoodManager : MonoBehaviour
         ActivateFood();
         DeactivateFood();
 
-        Instantiate(GenerateGrid.Instance.Animal, Vector3.zero, Quaternion.identity);
+        AnimalManager.Instance.SpawnAnimals();
         StopCoroutine(GenerateFood());
     }
 
@@ -45,9 +46,13 @@ public class FoodManager : MonoBehaviour
         ActivateFoods.Remove(food);
         DeactivatedFoods.Add(food);
 
-        int iFood = Random.Range(0, DeactivatedFoods.Count);
-        ActivateFoods.Add(DeactivatedFoods[iFood]);
-        DeactivatedFoods.Remove(DeactivatedFoods[iFood]);
+        if (_generateNewFood)
+        {
+            int iFood = Random.Range(0, DeactivatedFoods.Count);
+            ActivateFoods.Add(DeactivatedFoods[iFood]);
+            DeactivatedFoods.Remove(DeactivatedFoods[iFood]);
+        }
+
         ActivateFood();
         //ActivateFoods[iFood].IsFood = true;
     }

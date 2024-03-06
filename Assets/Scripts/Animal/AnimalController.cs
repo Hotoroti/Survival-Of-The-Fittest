@@ -29,7 +29,10 @@ public class AnimalController : MonoBehaviour
         _currentState.OnStateUpdate();
         CurrentLife -= Time.fixedDeltaTime;
         if (CurrentLife <= 0)
+        {
+            AnimalManager.Instance.Animals.Remove(gameObject);
             Destroy(gameObject);
+        }
     }
 
     public void ChangeState(AnimalState state)
