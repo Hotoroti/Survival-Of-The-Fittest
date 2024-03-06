@@ -17,7 +17,9 @@ public class AnimalDNA : MonoBehaviour
         }
         else
         {
-            Chromosomes = AnimalManager.Instance.BestOfNewestGeneration.Chromosomes;
+            Chromosomes[0] = AnimalManager.Instance.BestOfNewestGeneration.Chromosomes[0] * Random.Range(.1f, 2f);
+            Chromosomes[1] = AnimalManager.Instance.BestOfNewestGeneration.Chromosomes[1] * Random.Range(.1f, 2f);
+            Chromosomes[2] = AnimalManager.Instance.BestOfNewestGeneration.Chromosomes[2] * Random.Range(.1f, 2f);
         }
         //Chromosome 0 = speed
         //Chromosome 1 = _size

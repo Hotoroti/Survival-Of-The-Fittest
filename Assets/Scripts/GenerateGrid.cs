@@ -28,6 +28,6 @@ public class GenerateGrid : MonoBehaviour
                 GridCells.Add(Instantiate(_gridObj, new Vector3(x * _spacing, 0, z * _spacing), Quaternion.identity, parent.transform));
             }
         }
-        StartCoroutine(FoodManager.Instance.GenerateFood());
+        StartCoroutine(FoodManager.Instance.IGenerateFood());
     }
 }

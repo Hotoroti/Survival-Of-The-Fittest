@@ -20,9 +20,8 @@ public class FoodManager : MonoBehaviour
             Instance = this;
     }
 
-    public IEnumerator GenerateFood()
+    public void GenerateFood()
     {
-        yield return null;
         for (int i = 0; i < _maxActivateFoodCount; i++)
         {
             int iFood = Random.Range(0, DeactivatedFoods.Count);
@@ -34,9 +33,15 @@ public class FoodManager : MonoBehaviour
 
         ActivateFood();
         DeactivateFood();
+    }
+
+    public IEnumerator IGenerateFood()
+    {
+        yield return null;
+        GenerateFood();
 
         AnimalManager.Instance.SpawnAnimals();
-        StopCoroutine(GenerateFood());
+        StopCoroutine(IGenerateFood());
     }
 
     public void FoodHasBeenEaten(FoodObject food)
