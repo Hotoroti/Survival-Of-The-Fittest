@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AnimalLookingForFood : AnimalState
 {
-    private int _eatingTime = 5;
+    private int _eatingTime = 2;
 
     private float timer;
     private Transform _target;
