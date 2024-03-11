@@ -9,18 +9,10 @@ public class AnimalDNA : MonoBehaviour
 
     private void Awake()
     {
-        if (AnimalManager.Instance.Generation <= 1)
-        {
-            _speed = (int)Random.Range(_minSpeed, _maxSpeed);
-            _size = (int)Random.Range(_minSize, _maxSize);
-            _life = (int)Random.Range(_minLife, _maxLife);
-        }
-        else
-        {
-            Chromosomes[0] = AnimalManager.Instance.BestOfNewestGeneration.Chromosomes[0] * Random.Range(.1f, 2f);
-            Chromosomes[1] = AnimalManager.Instance.BestOfNewestGeneration.Chromosomes[1] * Random.Range(.1f, 2f);
-            Chromosomes[2] = AnimalManager.Instance.BestOfNewestGeneration.Chromosomes[2] * Random.Range(.1f, 2f);
-        }
+        _speed = (int)Random.Range(_minSpeed, _maxSpeed);
+        _size = (int)Random.Range(_minSize, _maxSize);
+        _life = (int)Random.Range(_minLife, _maxLife);
+
         //Chromosome 0 = speed
         //Chromosome 1 = _size
         //Chromosome 2 = _life
