@@ -13,8 +13,8 @@ public class AnimalLookingForFood : AnimalState
 
     private void RandomWalkTarget()
     {
-        int iPoint = Random.Range(0, FoodManager.Instance.ActivateFoods.Count);
-        _target = FoodManager.Instance.ActivateFoods[iPoint].transform;
+        int iPoint = Random.Range(0, FoodManager.Instance.DeactivatedFoods.Count);
+        _target = FoodManager.Instance.DeactivatedFoods[iPoint].transform;
         controller.Agent.SetDestination(_target.transform.position);
     }
 
@@ -30,6 +30,7 @@ public class AnimalLookingForFood : AnimalState
                 RandomWalkTarget();
                 timer = 0;
                 controller.ResetLife();
+                DetectedFood = false;
                 controller.ChangeState(new AnimalWalking(controller));
             }
         }
@@ -37,12 +38,16 @@ public class AnimalLookingForFood : AnimalState
 
     public override void OnStateEnter()
     {
+        CurrentState = "LookingForFood";
         RandomWalkTarget();
     }
 
     public override void OnStateUpdate()
     {
-        if (FoodManager.Instance.ActivateFoods.Count != 0 && controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
+        if (!DetectedFood && controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
+            RandomWalkTarget();
+
+        if (FoodManager.Instance.ActivateFoods.Count != 0 && DetectedFood && controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
             Eating();
 
         if (FoodManager.Instance.ActivateFoods.Count == 0)

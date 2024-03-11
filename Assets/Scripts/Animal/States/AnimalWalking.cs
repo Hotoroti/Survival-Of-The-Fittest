@@ -17,6 +17,7 @@ public class AnimalWalking : AnimalState
 
     public override void OnStateEnter()
     {
+        CurrentState = "Walking";
         RandomWalkTarget();
     }
 

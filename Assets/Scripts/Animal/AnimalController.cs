@@ -47,6 +47,23 @@ public class AnimalController : MonoBehaviour
         CurrentLife = AnimalDNA.Chromosomes[2];
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (_currentState.CurrentState == "LookingForFood" && !_currentState.DetectedFood && other.CompareTag("Food"))
+        {
+            _currentState.DetectedFood = true;
+            Agent.SetDestination(other.transform.position);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (_currentState.CurrentState == "LookingForFood" && _currentState.DetectedFood && other.CompareTag("Food"))
+        {
+            _currentState.DetectedFood = false;
+            ChangeState(new AnimalWalking(this));
+        }
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
