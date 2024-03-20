@@ -10,22 +10,23 @@ public class FoodObject : MonoBehaviour
     {
         FoodManager.Instance.DeactivatedFoods.Add(this);
     }
-    private void Update()
+
+    public void ShowFood()
     {
-        if (IsFood)
-        {
-            _foodObj.SetActive(true);            
-        }
-        else
-        {
-            _foodObj.SetActive(false);            
-        }
+        if (IsFood)        
+            _foodObj.SetActive(true);        
+        else       
+            _foodObj.SetActive(false);        
     }
 
     [ContextMenu("FoodHasBeenEaten")]
     public void HasBeenEaten()
     {
         IsFood = false;
-        FoodManager.Instance.FoodHasBeenEaten(this);
+        ShowFood();
+        FoodManager.Instance.ActivateFoods.Remove(this);
+        FoodManager.Instance.DeactivatedFoods.Add(this);
+
+        FoodManager.Instance.FoodHasBeenEaten();
     }
 }

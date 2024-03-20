@@ -45,24 +45,18 @@ public class FoodManager : MonoBehaviour
         StopCoroutine(IGenerateFood());
     }
 
-    public void FoodHasBeenEaten(FoodObject food)
-    {
-        food.IsFood = false;        
-
+    public void FoodHasBeenEaten()
+    { 
         if (_generateNewFood)
         {
             int iFood = Random.Range(0, DeactivatedFoods.Count);
-            ActivateFoods.Add(DeactivatedFoods[iFood]);
-            DeactivatedFoods.Remove(DeactivatedFoods[iFood]);
-        }
+            var foodObj = DeactivatedFoods[iFood];
+            foodObj.IsFood = true;
+            foodObj.ShowFood();
+            ActivateFoods.Add(foodObj);
+            DeactivatedFoods.Remove(foodObj);
 
-        if (ActivateFoods.Contains(food))
-        {
-            ActivateFoods.Remove(food);
-            DeactivatedFoods.Add(food);
-        }
-        ActivateFood();
-        //ActivateFoods[iFood].IsFood = true;
+        }       
     }
 
     public void ActivateFood()
@@ -70,6 +64,7 @@ public class FoodManager : MonoBehaviour
         foreach (var food in ActivateFoods)
         {
             food.IsFood = true;
+            food.ShowFood();
         }
     }
 
@@ -78,6 +73,7 @@ public class FoodManager : MonoBehaviour
         foreach (var food in DeactivatedFoods)
         {
             food.IsFood = false;
+            food.ShowFood();
         }
     }
 
