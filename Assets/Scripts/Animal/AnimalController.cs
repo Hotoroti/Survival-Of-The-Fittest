@@ -19,14 +19,17 @@ public class AnimalController : MonoBehaviour
         transform.localScale *= AnimalDNA.Chromosomes[1];
         CurrentLife = AnimalDNA.Chromosomes[2];
 
-        _currentState = new AnimalWalking(this);
+        _currentState = new AnimalWalking();
 
-        _currentState.OnStateEnter();
+        if(_currentState != null) 
+            _currentState.StateEnter(this);
     }
 
     private void FixedUpdate()
     {
-        _currentState.OnStateUpdate();
+        if(_currentState != null)
+            _currentState.StateUpdate();
+
         CurrentLife -= Time.fixedDeltaTime;
         if (CurrentLife <= 0)
         {
@@ -37,9 +40,11 @@ public class AnimalController : MonoBehaviour
 
     public void ChangeState(AnimalState state)
     {
-        _currentState.OnStateExit();
+        if(_currentState != null)
+            _currentState.StateExit();
+
         _currentState = state;
-        _currentState.OnStateEnter();
+        _currentState.StateEnter(this);
     }
 
     public void ResetLife()
@@ -61,19 +66,19 @@ public class AnimalController : MonoBehaviour
         if (_currentState.CurrentState == "LookingForFood" && _currentState.DetectedFood && other.CompareTag("Food"))
         {
             _currentState.DetectedFood = false;
-            ChangeState(new AnimalWalking(this));
+            ChangeState(new AnimalWalking());
         }
     }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            ChangeState(new AnimalWalking(this));
+            ChangeState(new AnimalWalking());
         }
 
         if (Input.GetKeyDown(KeyCode.O))
         {
-            ChangeState(new AnimalLookingForFood(this));
+            ChangeState(new AnimalLookingForFood());
         }
     }
 }

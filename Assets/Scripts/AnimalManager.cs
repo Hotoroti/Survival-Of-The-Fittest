@@ -24,7 +24,6 @@ public class AnimalManager : MonoBehaviour
 
     public void SpawnAnimals()
     {
-        FoodManager.Instance.GenerateFood();
         for (int i = 0; i < _animalSpawnCount; i++)
         {
             Animals.Add(Instantiate(_animalOBJ, new Vector3(0, 0, 0), Quaternion.identity, parent.transform));

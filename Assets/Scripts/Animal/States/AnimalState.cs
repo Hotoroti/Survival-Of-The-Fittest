@@ -1,19 +1,29 @@
 using UnityEngine;
 
-public abstract class AnimalState : MonoBehaviour
+public abstract class AnimalState
 {
     protected AnimalController controller;
 
     public string CurrentState { get; protected set; }
-    public bool DetectedFood { get; set; }
+    public bool DetectedFood { get; set; }    
 
-    public AnimalState(AnimalController animalController)
+    public void StateEnter(AnimalController ac)
     {
-        controller = animalController;
+        controller = ac;
+        OnEnter();
     }
-    abstract public void OnStateEnter();
 
-    abstract public void OnStateUpdate();
+    abstract public void OnEnter();
 
-    abstract public void OnStateExit();
+    public void StateUpdate()
+    {
+        OnUpdate();
+    }
+    abstract public void OnUpdate();
+
+    public void StateExit()
+    {
+        OnExit();
+    }
+    abstract public void OnExit();
 }

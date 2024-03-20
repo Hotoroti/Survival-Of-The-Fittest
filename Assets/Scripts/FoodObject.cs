@@ -13,14 +13,19 @@ public class FoodObject : MonoBehaviour
     private void Update()
     {
         if (IsFood)
-            _foodObj.SetActive(true);
+        {
+            _foodObj.SetActive(true);            
+        }
         else
-            _foodObj.SetActive(false);
+        {
+            _foodObj.SetActive(false);            
+        }
     }
 
     [ContextMenu("FoodHasBeenEaten")]
     public void HasBeenEaten()
     {
+        IsFood = false;
         FoodManager.Instance.FoodHasBeenEaten(this);
     }
 }
