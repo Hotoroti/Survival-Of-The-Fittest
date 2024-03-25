@@ -8,6 +8,8 @@ public class AnimalController : MonoBehaviour
     public float CurrentLife { get; private set; }
     public AnimalDNA AnimalDNA { get; private set; }
 
+    public FoodObject Food { get; set; }
+
     [HideInInspector] public NavMeshAgent Agent;
 
     private void Start()
@@ -21,13 +23,13 @@ public class AnimalController : MonoBehaviour
 
         _currentState = new AnimalWalking();
 
-        if(_currentState != null) 
+        if (_currentState != null)
             _currentState.StateEnter(this);
     }
 
     private void FixedUpdate()
     {
-        if(_currentState != null)
+        if (_currentState != null)
             _currentState.StateUpdate();
 
         CurrentLife -= Time.fixedDeltaTime;
@@ -40,7 +42,7 @@ public class AnimalController : MonoBehaviour
 
     public void ChangeState(AnimalState state)
     {
-        if(_currentState != null)
+        if (_currentState != null)
             _currentState.StateExit();
 
         _currentState = state;
@@ -57,7 +59,8 @@ public class AnimalController : MonoBehaviour
         if (_currentState.CurrentState == "LookingForFood" && !_currentState.DetectedFood && other.CompareTag("Food"))
         {
             _currentState.DetectedFood = true;
-            Agent.SetDestination(other.transform.position);
+            Food = other.transform.parent.gameObject.GetComponent<FoodObject>();
+            Agent.SetDestination(Food.transform.position);
         }
     }
 
@@ -65,10 +68,11 @@ public class AnimalController : MonoBehaviour
     {
         if (_currentState.CurrentState == "LookingForFood" && _currentState.DetectedFood && other.CompareTag("Food"))
         {
-            _currentState.DetectedFood = false;
+
             ChangeState(new AnimalWalking());
         }
     }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))

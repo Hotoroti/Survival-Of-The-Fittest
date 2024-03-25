@@ -13,10 +13,10 @@ public class FoodObject : MonoBehaviour
 
     public void ShowFood()
     {
-        if (IsFood)        
-            _foodObj.SetActive(true);        
-        else       
-            _foodObj.SetActive(false);        
+        if (IsFood)
+            _foodObj.SetActive(true);
+        else
+            _foodObj.SetActive(false);
     }
 
     [ContextMenu("FoodHasBeenEaten")]
@@ -24,9 +24,6 @@ public class FoodObject : MonoBehaviour
     {
         IsFood = false;
         ShowFood();
-        FoodManager.Instance.ActivateFoods.Remove(this);
-        FoodManager.Instance.DeactivatedFoods.Add(this);
-
-        FoodManager.Instance.FoodHasBeenEaten();
+        FoodManager.Instance.FoodHasBeenEaten(this);
     }
 }

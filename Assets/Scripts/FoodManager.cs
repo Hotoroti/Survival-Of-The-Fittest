@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public class FoodManager : MonoBehaviour
 {
@@ -45,8 +44,8 @@ public class FoodManager : MonoBehaviour
         StopCoroutine(IGenerateFood());
     }
 
-    public void FoodHasBeenEaten()
-    { 
+    public void FoodHasBeenEaten(FoodObject food)
+    {
         if (_generateNewFood)
         {
             int iFood = Random.Range(0, DeactivatedFoods.Count);
@@ -55,8 +54,10 @@ public class FoodManager : MonoBehaviour
             foodObj.ShowFood();
             ActivateFoods.Add(foodObj);
             DeactivatedFoods.Remove(foodObj);
+        }
 
-        }       
+        ActivateFoods.Remove(food);
+        DeactivatedFoods.Add(food);
     }
 
     public void ActivateFood()

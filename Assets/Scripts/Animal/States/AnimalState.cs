@@ -5,7 +5,8 @@ public abstract class AnimalState
     protected AnimalController controller;
 
     public string CurrentState { get; protected set; }
-    public bool DetectedFood { get; set; }    
+    public bool DetectedFood { get; set; }
+    public FoodObject Food { get; set; }
 
     public void StateEnter(AnimalController ac)
     {
@@ -26,4 +27,10 @@ public abstract class AnimalState
         OnExit();
     }
     abstract public void OnExit();
+
+    protected void WalkTarget()
+    {
+        int iPoint = Random.Range(0, GenerateGrid.Instance.GridCells.Count);
+        controller.Agent.SetDestination(GenerateGrid.Instance.GridCells[iPoint].transform.position);
+    }
 }
