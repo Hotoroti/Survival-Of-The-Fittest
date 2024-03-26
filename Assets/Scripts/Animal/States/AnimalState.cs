@@ -6,7 +6,7 @@ public abstract class AnimalState
 
     public string CurrentState { get; protected set; }
     public bool DetectedFood { get; set; }
-    public FoodObject Food { get; set; }
+    public bool DetectedMate { get; set; }
 
     public void StateEnter(AnimalController ac)
     {

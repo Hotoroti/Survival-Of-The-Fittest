@@ -12,6 +12,11 @@ public class AnimalManager : MonoBehaviour
 
     public List<GameObject> Animals = new List<GameObject>();
 
+    public List<GameObject> AllFemaleAnimals = new List<GameObject>();
+    public List<GameObject> AllMaleAnimals = new List<GameObject>();
+
+    public List<GameObject> FemaleAnimalsToMate = new List<GameObject>();
+
     private void Awake()
     {
         if (Instance != null)

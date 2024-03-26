@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5135801410441908453}
   m_Layer: 0
   m_Name: Animal
-  m_TagString: Untagged
+  m_TagString: Animal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -128,6 +128,7 @@ MonoBehaviour:
   _minSense: 5
   _maxSense: 20
   _senseCollider: {fileID: 4963409184426468278}
+  _renderer: {fileID: 5315895118770544706}
   Chromosomes: []
 --- !u!114 &5135801410441908453
 MonoBehaviour:
@@ -142,6 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Agent: {fileID: 0}
+  MateTime: 30
 --- !u!1 &8668882594116439143
 GameObject:
   m_ObjectHideFlags: 0

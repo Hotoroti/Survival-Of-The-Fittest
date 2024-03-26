@@ -205,6 +205,9 @@ MonoBehaviour:
   _animalOBJ: {fileID: 6761660954548527424, guid: 8cad213cdf83da54cb8826e067855e72, type: 3}
   _animalSpawnCount: 10
   Animals: []
+  AllFemaleAnimals: []
+  AllMaleAnimals: []
+  FemaleAnimalsToMate: []
 --- !u!1 &108426689
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,7 +469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf0cb6a0e70e91b499ce5061b72af020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speedUp: 1
+  _speedUp: 0
   _speed: 5
 --- !u!4 &856993148
 Transform:

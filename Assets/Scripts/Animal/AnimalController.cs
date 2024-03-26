@@ -9,8 +9,11 @@ public class AnimalController : MonoBehaviour
     public AnimalDNA AnimalDNA { get; private set; }
 
     public FoodObject Food { get; set; }
+    public AnimalController Mate { get; set; }
 
     [HideInInspector] public NavMeshAgent Agent;
+
+    public float MateTime = 10f;
 
     private void Start()
     {
@@ -32,11 +35,20 @@ public class AnimalController : MonoBehaviour
         if (_currentState != null)
             _currentState.StateUpdate();
 
-        CurrentLife -= Time.fixedDeltaTime;
+        //CurrentLife -= Time.fixedDeltaTime;
         if (CurrentLife <= 0)
         {
             AnimalManager.Instance.Animals.Remove(gameObject);
             Destroy(gameObject);
+        }
+
+        if (AnimalDNA.Chromosomes[4] == 0 && !_currentState.DetectedMate)
+        {
+            MateTime -= Time.fixedDeltaTime;
+            if (MateTime <= 0)
+            {
+                ChangeState(new AnimalLookingForMate());
+            }
         }
     }
 
@@ -62,27 +74,34 @@ public class AnimalController : MonoBehaviour
             Food = other.transform.parent.gameObject.GetComponent<FoodObject>();
             Agent.SetDestination(Food.transform.position);
         }
+
+        if (_currentState.CurrentState == "LookingForMate" && !_currentState.DetectedMate && other.CompareTag("Animal"))
+        {
+            if (AnimalManager.Instance.FemaleAnimalsToMate.Contains(other.gameObject))
+            {
+                _currentState.DetectedMate = true;
+                AnimalManager.Instance.FemaleAnimalsToMate.Remove(other.gameObject);
+                Mate = other.transform.gameObject.GetComponent<AnimalController>();
+                Mate.Mate = this;
+                Mate.Agent.isStopped = true;
+                Agent.isStopped = true;
+                transform.position = other.transform.position;
+                Agent.SetDestination(other.transform.position);
+            }
+
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (_currentState.CurrentState == "LookingForFood" && _currentState.DetectedFood && other.CompareTag("Food"))
         {
-
-            ChangeState(new AnimalWalking());
-        }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
             ChangeState(new AnimalWalking());
         }
 
-        if (Input.GetKeyDown(KeyCode.O))
+        if (_currentState.CurrentState == "LookingForMate" && _currentState.DetectedMate && other.CompareTag("Animal"))
         {
-            ChangeState(new AnimalLookingForFood());
+            ChangeState(new AnimalLookingForMate());
         }
     }
 }
