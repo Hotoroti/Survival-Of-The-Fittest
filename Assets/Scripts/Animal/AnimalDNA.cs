@@ -12,11 +12,10 @@ public class AnimalDNA : MonoBehaviour
 
     private void Awake()
     {
-        _speed = (int)Random.Range(_minSpeed, _maxSpeed);
-        _size = (int)Random.Range(_minSize, _maxSize);
-        _life = (int)Random.Range(_minLife, _maxLife);
-        _sense = (int)Random.Range(_minSense, _maxSense);
-        _gender = (int)Random.Range(0, 2);
+        if (!AnimalManager.Instance.FirstGenerationPast)
+            FirstGenerationAnimals();
+        else
+            OtherGenerationAnimals();
 
         if (_gender == 0)
         {
@@ -37,5 +36,27 @@ public class AnimalDNA : MonoBehaviour
         //Chromosome 3 = _sense
         //Chromosome 4 = _gender (0 = male, 1 female)
         Chromosomes = new List<float> { _speed, _size, _life, _sense, _gender };
+    }
+
+    public void FirstGenerationAnimals()
+    {
+        _speed = (int)Random.Range(_minSpeed, _maxSpeed);
+        _size = (int)Random.Range(_minSize, _maxSize);
+        _life = (int)Random.Range(_minLife, _maxLife);
+        _sense = (int)Random.Range(_minSense, _maxSense);
+        _gender = (int)Random.Range(0, 2);
+    }
+
+    public void OtherGenerationAnimals()
+    {
+        var parentController = transform.parent.gameObject.GetComponent<AnimalController>();
+
+        _speed = Random.Range(0, 2) < 1 ? parentController.AnimalDNA.Chromosomes[0] : parentController.Mate.AnimalDNA.Chromosomes[0];
+        _size = Random.Range(0, 2) < 1 ? parentController.AnimalDNA.Chromosomes[1] : parentController.Mate.AnimalDNA.Chromosomes[1];
+        _life = Random.Range(0, 2) < 1 ? parentController.AnimalDNA.Chromosomes[2] : parentController.Mate.AnimalDNA.Chromosomes[2];
+        _sense = Random.Range(0, 2) < 1 ? parentController.AnimalDNA.Chromosomes[3] : parentController.Mate.AnimalDNA.Chromosomes[3]; ;
+        _gender = Random.Range(0, 2);
+
+        transform.parent = null;
     }
 }

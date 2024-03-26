@@ -87,6 +87,7 @@ public class AnimalController : MonoBehaviour
                 Agent.isStopped = true;
                 transform.position = other.transform.position;
                 Agent.SetDestination(other.transform.position);
+                Invoke("InstantiateChild", 5f);
             }
 
         }
@@ -103,5 +104,15 @@ public class AnimalController : MonoBehaviour
         {
             ChangeState(new AnimalLookingForMate());
         }
+    }
+
+    public void InstantiateChild()
+    {
+        Instantiate(AnimalManager.Instance.AnimalObject, transform.position, Quaternion.identity, transform);
+        Agent.isStopped = false;
+        ChangeState(new AnimalWalking());
+
+        Mate.Agent.isStopped = false;
+        Mate.ChangeState(new AnimalWalking());
     }
 }

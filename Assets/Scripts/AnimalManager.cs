@@ -17,6 +17,10 @@ public class AnimalManager : MonoBehaviour
 
     public List<GameObject> FemaleAnimalsToMate = new List<GameObject>();
 
+    public GameObject AnimalObject { get { return _animalOBJ; } }
+
+    public bool FirstGenerationPast = false;
+
     private void Awake()
     {
         if (Instance != null)
@@ -33,6 +37,7 @@ public class AnimalManager : MonoBehaviour
         {
             Animals.Add(Instantiate(_animalOBJ, new Vector3(0, 0, 0), Quaternion.identity, parent.transform));
         }
+        FirstGenerationPast = true;
     }
 }
 
