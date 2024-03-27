@@ -40,6 +40,7 @@ public class AnimalDNA : MonoBehaviour
 
     public void FirstGenerationAnimals()
     {
+        Debug.Log("RandomValues");
         _speed = (int)Random.Range(_minSpeed, _maxSpeed);
         _size = (int)Random.Range(_minSize, _maxSize);
         _life = (int)Random.Range(_minLife, _maxLife);
@@ -49,14 +50,17 @@ public class AnimalDNA : MonoBehaviour
 
     public void OtherGenerationAnimals()
     {
+
+        Debug.Log("ParentValues");
         var parentController = transform.parent.gameObject.GetComponent<AnimalController>();
+        transform.parent = AnimalManager.Instance.Parent.transform;
 
         _speed = Random.Range(0, 2) < 1 ? parentController.AnimalDNA.Chromosomes[0] : parentController.Mate.AnimalDNA.Chromosomes[0];
         _size = Random.Range(0, 2) < 1 ? parentController.AnimalDNA.Chromosomes[1] : parentController.Mate.AnimalDNA.Chromosomes[1];
         _life = Random.Range(0, 2) < 1 ? parentController.AnimalDNA.Chromosomes[2] : parentController.Mate.AnimalDNA.Chromosomes[2];
-        _sense = Random.Range(0, 2) < 1 ? parentController.AnimalDNA.Chromosomes[3] : parentController.Mate.AnimalDNA.Chromosomes[3]; ;
-        _gender = Random.Range(0, 2);
-
-        transform.parent = null;
+        _sense = Random.Range(0, 2) < 1 ? parentController.AnimalDNA.Chromosomes[3] : parentController.Mate.AnimalDNA.Chromosomes[3];
+        _gender = Random.Range(0, 2);      
+        
+        _size /= _size;
     }
 }

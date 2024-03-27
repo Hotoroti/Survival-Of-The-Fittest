@@ -6,7 +6,7 @@ public class AnimalManager : MonoBehaviour
     [SerializeField] private GameObject _animalOBJ;
     [SerializeField] private int _animalSpawnCount;
 
-    private GameObject parent;
+    [HideInInspector]public GameObject Parent;
 
     public static AnimalManager Instance;
 
@@ -28,14 +28,14 @@ public class AnimalManager : MonoBehaviour
         else
             Instance = this;
 
-        parent = new GameObject("AnimalParent");
+        Parent = new GameObject("AnimalParent");
     }
 
     public void SpawnAnimals()
     {
         for (int i = 0; i < _animalSpawnCount; i++)
         {
-            Animals.Add(Instantiate(_animalOBJ, new Vector3(0, 0, 0), Quaternion.identity, parent.transform));
+            Animals.Add(Instantiate(_animalOBJ, new Vector3(0, 0, 0), Quaternion.identity, Parent.transform));
         }
         FirstGenerationPast = true;
     }

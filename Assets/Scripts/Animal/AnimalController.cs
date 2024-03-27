@@ -24,6 +24,8 @@ public class AnimalController : MonoBehaviour
         transform.localScale *= AnimalDNA.Chromosomes[1];
         CurrentLife = AnimalDNA.Chromosomes[2];
 
+        ResetValues();
+
         _currentState = new AnimalWalking();
 
         if (_currentState != null)
@@ -66,6 +68,13 @@ public class AnimalController : MonoBehaviour
         CurrentLife = AnimalDNA.Chromosomes[2];
     }
 
+    private void ResetValues()
+    {
+        ResetLife();
+        Food = null;
+        Mate = null;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (_currentState.CurrentState == "LookingForFood" && !_currentState.DetectedFood && other.CompareTag("Food"))
@@ -84,9 +93,8 @@ public class AnimalController : MonoBehaviour
                 Mate = other.transform.gameObject.GetComponent<AnimalController>();
                 Mate.Mate = this;
                 Mate.Agent.isStopped = true;
-                Agent.isStopped = true;
-                transform.position = other.transform.position;
-                Agent.SetDestination(other.transform.position);
+                transform.position = Mate.transform.position;
+                //Agent.SetDestination(other.transform.position);
                 Invoke("InstantiateChild", 5f);
             }
 
@@ -109,10 +117,19 @@ public class AnimalController : MonoBehaviour
     public void InstantiateChild()
     {
         Instantiate(AnimalManager.Instance.AnimalObject, transform.position, Quaternion.identity, transform);
+
+        MateTime = 30f;
+        _currentState.DetectedMate = false;
+
         Agent.isStopped = false;
         ChangeState(new AnimalWalking());
 
         Mate.Agent.isStopped = false;
+        
         Mate.ChangeState(new AnimalWalking());
+
+        Mate.Mate = null;
+        Mate = null;
+        AnimalManager.Instance.FemaleAnimalsToMate.Add(Mate.gameObject);
     }
 }

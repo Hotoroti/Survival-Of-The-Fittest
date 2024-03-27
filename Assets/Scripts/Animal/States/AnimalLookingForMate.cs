@@ -9,7 +9,7 @@ public class AnimalLookingForMate : AnimalState
     public override void OnEnter()
     {
         CurrentState = "LookingForMate";
-        WalkTarget();
+        Debug.Log(CurrentState);        
     }
 
     public override void OnExit()
@@ -20,11 +20,14 @@ public class AnimalLookingForMate : AnimalState
 
     public override void OnUpdate()
     {
-        if (DetectedMate && controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
+        if (AnimalManager.Instance.FemaleAnimalsToMate != null && DetectedMate && controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
             Mate();
 
-        if (!DetectedMate && controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
-            WalkTarget();
+        /*if (!DetectedMate && controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
+            WalkTarget();*/
+
+        /*if (AnimalManager.Instance.FemaleAnimalsToMate == null)
+            controller.ChangeState(new AnimalWalking());*/
 
         /*if (FoodManager.Instance.ActivateFoods.Count != 0 && controller.CurrentLife <= controller.AnimalDNA.Chromosomes[2] * .5f)
             controller.ChangeState(new AnimalLookingForFood());*/
