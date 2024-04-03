@@ -164,7 +164,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 27124574}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 174317f964542da4095d2a78919de595, type: 3}
   m_Name: 
@@ -204,10 +204,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animalOBJ: {fileID: 6761660954548527424, guid: 8cad213cdf83da54cb8826e067855e72, type: 3}
   _animalSpawnCount: 10
+  Parent: {fileID: 0}
   Animals: []
   AllFemaleAnimals: []
   AllMaleAnimals: []
   FemaleAnimalsToMate: []
+  FirstGenerationPast: 0
 --- !u!1 &108426689
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,7 +223,7 @@ GameObject:
   - component: {fileID: 108426692}
   - component: {fileID: 108426691}
   - component: {fileID: 108426694}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -346,6 +348,37 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: fb90ee7c22e06604793e653b1adf86ab, type: 2}
   m_BuildHeightMesh: 0
+--- !u!1 &152157679
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 152157683}
+  m_Layer: 7
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &152157683
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 152157679}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 250, y: 0, z: 250}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 732676274}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,6 +473,89 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &732676272
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 732676274}
+  - component: {fileID: 732676273}
+  - component: {fileID: 732676275}
+  - component: {fileID: 732676276}
+  m_Layer: 7
+  m_Name: Floor1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &732676273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732676272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 837e22efa452798428886849f067c82f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sizeX: 100
+  _sizeZ: 100
+  _spacing: 5
+  _gridObj: {fileID: 1281544313178718543, guid: 27c2d685b576b8b42b85547d2d8921bf, type: 3}
+  GridCells: []
+--- !u!4 &732676274
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732676272}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 152157683}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &732676275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732676272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d38afb7300f5cc54bbda873676ddde09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxAvailableFood: 10
+  _generateFloor: {fileID: 732676273}
+  _food: {fileID: 7377248720605093028, guid: c0a2e067220d4d74d98a2093e61c0df4, type: 3}
+  DeactivatedFoodList: []
+--- !u!114 &732676276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732676272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2501c04e16f5b3a44953e1035beb213e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _initialAnimalCount: 10
+  _animalObj: {fileID: 6761660954548527424, guid: 8cad213cdf83da54cb8826e067855e72, type: 3}
+  _spawnPoint: {fileID: 152157683}
 --- !u!1 &856993146
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,7 +586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speedUp: 0
-  _speed: 5
+  _speed: 1
 --- !u!4 &856993148
 Transform:
   m_ObjectHideFlags: 0
@@ -501,7 +617,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &872282734
 Transform:
   m_ObjectHideFlags: 0
@@ -614,8 +730,9 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 27124575}
   - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 872282734}
   - {fileID: 856993148}
+  - {fileID: 732676274}
+  - {fileID: 27124575}

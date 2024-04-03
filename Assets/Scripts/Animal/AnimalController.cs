@@ -37,7 +37,7 @@ public class AnimalController : MonoBehaviour
         if (_currentState != null)
             _currentState.StateUpdate();
 
-        //CurrentLife -= Time.fixedDeltaTime;
+        //CurrentLife -= Time.fixedDeltaTime * ((AnimalDNA.Chromosomes[0] / 1) / 2) ;
         if (CurrentLife <= 0)
         {
             AnimalManager.Instance.Animals.Remove(gameObject);
@@ -124,12 +124,20 @@ public class AnimalController : MonoBehaviour
         Agent.isStopped = false;
         ChangeState(new AnimalWalking());
 
-        Mate.Agent.isStopped = false;
-        
+        if (Mate == null) return;
+        Mate.Agent.isStopped = false;        
         Mate.ChangeState(new AnimalWalking());
 
-        Mate.Mate = null;
+
+        HasMated(Mate);   
         Mate = null;
-        AnimalManager.Instance.FemaleAnimalsToMate.Add(Mate.gameObject);
+        //AnimalManager.Instance.FemaleAnimalsToMate.Add(Mate.gameObject);
+
+    }
+
+    public void HasMated(AnimalController other)
+    {
+        other.Mate = null;
+        AnimalManager.Instance.FemaleAnimalsToMate.Add(other.gameObject);
     }
 }

@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 6532310108362289337}
   - component: {fileID: 8022274417142318600}
   m_Layer: 0
-  m_Name: Ground
+  m_Name: Food
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

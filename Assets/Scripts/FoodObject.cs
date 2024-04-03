@@ -8,7 +8,8 @@ public class FoodObject : MonoBehaviour
 
     private void Start()
     {
-        FoodManager.Instance.DeactivatedFoods.Add(this);
+        ShowFood();
+        //FoodManagerNew.Instance.DeactivatedFoods.Add(this);
     }
 
     public void ShowFood()
@@ -24,6 +25,6 @@ public class FoodObject : MonoBehaviour
     {
         IsFood = false;
         ShowFood();
-        FoodManager.Instance.FoodHasBeenEaten(this);
+        FoodManagerNew.Instance.FoodHasBeenEaten(this);
     }
 }

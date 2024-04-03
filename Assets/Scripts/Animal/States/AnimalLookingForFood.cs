@@ -7,7 +7,7 @@ public class AnimalLookingForFood : AnimalState
     private float timer;
     private void Eating()
     {
-        if (FoodManager.Instance.ActivateFoods.Count != 0)
+        if (FoodManagerNew.Instance.ActivateFoods.Count != 0)
         {
             timer += Time.fixedDeltaTime;
 
@@ -35,10 +35,10 @@ public class AnimalLookingForFood : AnimalState
         if (!DetectedFood && controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
             WalkTarget();
 
-        if (FoodManager.Instance.ActivateFoods.Count != 0 && DetectedFood && controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
+        if (FoodManagerNew.Instance.ActivateFoods.Count != 0 && DetectedFood && controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
             Eating();
 
-        if (FoodManager.Instance.ActivateFoods.Count == 0)
+        if (FoodManagerNew.Instance.ActivateFoods.Count == 0)
             controller.ChangeState(new AnimalWalking());
     }
 

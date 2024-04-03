@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FoodManager : MonoBehaviour
+public class FoodManagerNew : MonoBehaviour
 {
     [SerializeField] private int _maxActivateFoodCount;
     [SerializeField] private bool _generateNewFood;
@@ -10,7 +10,7 @@ public class FoodManager : MonoBehaviour
     public List<FoodObject> ActivateFoods = new List<FoodObject>();
     public List<FoodObject> DeactivatedFoods = new List<FoodObject>();
 
-    public static FoodManager Instance;
+    public static FoodManagerNew Instance;
 
     private void Awake()
     {

@@ -11,7 +11,7 @@ public class AnimalWalking : AnimalState
         if (controller.Agent.remainingDistance <= controller.Agent.stoppingDistance)
             WalkTarget();
 
-        if (FoodManager.Instance.ActivateFoods.Count != 0 && controller.CurrentLife <= controller.AnimalDNA.Chromosomes[2] * .5f)
+        if (FoodManagerNew.Instance.ActivateFoods.Count != 0 && controller.CurrentLife <= controller.AnimalDNA.Chromosomes[2] * .5f)
             controller.ChangeState(new AnimalLookingForFood());
     }
 
