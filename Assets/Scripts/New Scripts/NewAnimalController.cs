@@ -5,28 +5,41 @@ using UnityEngine.AI;
 
 public class NewAnimalController : MonoBehaviour
 {
-    public AnimalDNA AnimalDNA {  get; private set; }
+    [SerializeField] private float _energy;
 
     private Vector3 _walkTarget;
+
+    public AnimalDNA AnimalDNA { get; private set; }
+    public float CurrentEnergy {  get; private set; }   
     private void Awake()
     {
         AnimalDNA = GetComponent<AnimalDNA>();
         transform.localScale *= AnimalDNA.Chromosomes[1];
 
-        _walkTarget = transform.position + Random.onUnitSphere * AnimalDNA.Chromosomes[3];
+        CurrentEnergy = _energy;
+
+        _walkTarget = transform.position + Random.onUnitSphere * AnimalDNA.Chromosomes[2];
         _walkTarget = new Vector3(_walkTarget.x, transform.position.y, _walkTarget.z);
     }
 
     private void FixedUpdate()
     {
         Walk();
+        EnergyConsumption();
     }
 
+    private void EnergyConsumption()
+    {
+        if (CurrentEnergy > 0f)
+            CurrentEnergy -= Time.fixedDeltaTime * (.5f * AnimalDNA.Chromosomes[1] * (AnimalDNA.Chromosomes[0] * AnimalDNA.Chromosomes[0]));
+        else if (CurrentEnergy <= 0f)
+            Die();
+    }
     private void Walk()
     {
         if(_walkTarget == null || Vector3.Distance(transform.position, _walkTarget) <= .5f)
         {
-            _walkTarget = transform.position + Random.onUnitSphere * AnimalDNA.Chromosomes[3];
+            _walkTarget = transform.position + Random.onUnitSphere * AnimalDNA.Chromosomes[2];
             _walkTarget = new Vector3(_walkTarget.x, transform.position.y, _walkTarget.z);
         }
         else
@@ -40,10 +53,15 @@ public class NewAnimalController : MonoBehaviour
             }
             else
             {
-                _walkTarget = transform.position + Random.onUnitSphere * AnimalDNA.Chromosomes[3];
+                _walkTarget = transform.position + Random.onUnitSphere * AnimalDNA.Chromosomes[2];
                 _walkTarget = new Vector3(_walkTarget.x, transform.position.y, _walkTarget.z);
             }
         }
             
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }

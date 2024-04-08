@@ -123,8 +123,6 @@ MonoBehaviour:
   _maxSpeed: 10
   _minSize: 1
   _maxSize: 4
-  _minLife: 10
-  _maxLife: 50
   _minSense: 5
   _maxSense: 20
   _senseCollider: {fileID: 4963409184426468278}
@@ -142,6 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d7aee36df1270245a8ed64f8d0320ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _energy: 1000
 --- !u!1 &8668882594116439143
 GameObject:
   m_ObjectHideFlags: 0
