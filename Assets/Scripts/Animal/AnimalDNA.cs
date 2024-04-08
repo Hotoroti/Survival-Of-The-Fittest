@@ -43,7 +43,6 @@ public class AnimalDNA : MonoBehaviour
 
     public void FirstGenerationAnimals()
     {
-        Debug.Log("RandomValues");
         _speed = (int)Random.Range(_minSpeed, _maxSpeed);
         _size = (int)Random.Range(_minSize, _maxSize);
         _life = (int)Random.Range(_minLife, _maxLife);

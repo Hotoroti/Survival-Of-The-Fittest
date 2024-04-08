@@ -12,6 +12,7 @@ public class GenerateFloor : MonoBehaviour
     private void Awake()
     {
         GameObject parent = new GameObject("GridParent");
+        parent.transform.SetParent(transform);
         for (int x = 0; x < _sizeX; x++)
         {
             for (int z = 0; z < _sizeZ; z++)

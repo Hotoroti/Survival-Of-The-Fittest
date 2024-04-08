@@ -12,9 +12,12 @@ public class NewFoodManager : MonoBehaviour
     private List<GameObject> _activeFoodList = new List<GameObject>();
     private void Start()
     {
+        var parentObject = new GameObject("FoodParent");
+        parentObject.transform.parent = transform;
         foreach(GameObject obj in _generateFloor.GridCells)
         {
             var tempObj = Instantiate(_food, obj.transform.position, Quaternion.identity);
+            tempObj.transform.parent = parentObject.transform;
             DeactivatedFoodList.Add(tempObj);
         }
 

@@ -12,6 +12,9 @@ public class NewAnimalController : MonoBehaviour
     {
         AnimalDNA = GetComponent<AnimalDNA>();
         transform.localScale *= AnimalDNA.Chromosomes[1];
+
+        _walkTarget = transform.position + Random.onUnitSphere * AnimalDNA.Chromosomes[3];
+        _walkTarget = new Vector3(_walkTarget.x, transform.position.y, _walkTarget.z);
     }
 
     private void FixedUpdate()
@@ -23,7 +26,7 @@ public class NewAnimalController : MonoBehaviour
     {
         if(_walkTarget == null || Vector3.Distance(transform.position, _walkTarget) <= .5f)
         {
-            _walkTarget = Random.onUnitSphere * AnimalDNA.Chromosomes[3];
+            _walkTarget = transform.position + Random.onUnitSphere * AnimalDNA.Chromosomes[3];
             _walkTarget = new Vector3(_walkTarget.x, transform.position.y, _walkTarget.z);
         }
         else
@@ -37,7 +40,7 @@ public class NewAnimalController : MonoBehaviour
             }
             else
             {
-                _walkTarget = Random.onUnitSphere * AnimalDNA.Chromosomes[3];
+                _walkTarget = transform.position + Random.onUnitSphere * AnimalDNA.Chromosomes[3];
                 _walkTarget = new Vector3(_walkTarget.x, transform.position.y, _walkTarget.z);
             }
         }
