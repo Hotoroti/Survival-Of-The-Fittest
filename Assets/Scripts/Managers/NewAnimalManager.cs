@@ -9,6 +9,8 @@ public class NewAnimalManager : MonoBehaviour
     [SerializeField] private GenerateFloor _floor;
     
     private List<GameObject> _animals = new List<GameObject>();
+
+    public List<GameObject> AnimalsReadyToMate = new List<GameObject>();
     private void Start()
     {
         var parent = new GameObject("AnimalParent");

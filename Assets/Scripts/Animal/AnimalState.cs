@@ -5,12 +5,14 @@ using UnityEngine;
 public  class AnimalState : MonoBehaviour
 {
     public enum States { Walking, Eating, Mating, Running }
+    public GameObject MateTarget {  get; set; }
 
     private States _currentState;
     private NewAnimalController _animalController;
 
     private Vector3 _walkTarget;
-    private List<GameObject> _foodObject = new List<GameObject>();
+    private List<GameObject> _foodObjects = new List<GameObject>();
+    private List<GameObject> _mateObjects = new List<GameObject>();
 
     [SerializeField] private float _eatingTime;
     private float _eatingTimer;
@@ -33,6 +35,9 @@ public  class AnimalState : MonoBehaviour
                 break;
             case States.Eating:
                 Eating();
+                break;
+            case States.Mating:
+                Mating(); 
                 break;
         }  
     }
@@ -63,13 +68,13 @@ public  class AnimalState : MonoBehaviour
 
     private void Eating()
     {
-        if (Vector3.Distance(transform.position, _foodObject[0].transform.position) <= .1f)
+        if (Vector3.Distance(transform.position, _foodObjects[0].transform.position) <= .1f)
         {
             _eatingTimer += Time.fixedDeltaTime;
             if(_eatingTimer >= _eatingTime)
             {
-                _foodObject[0].GetComponentInParent<FoodObject>().HasBeenEaten();
-                _foodObject.Clear();
+                _foodObjects[0].GetComponentInParent<FoodObject>().HasBeenEaten();
+                _foodObjects.Clear();
                 _eatingTimer = 0;
                 _animalController.ResetEnergy();
                 _currentState = States.Walking;
@@ -77,32 +82,43 @@ public  class AnimalState : MonoBehaviour
         }
         else
         {
-            _animalController.transform.position = Vector3.MoveTowards(_animalController.transform.position, _foodObject[0].transform.position, Time.fixedDeltaTime * _animalController.AnimalDNA.Chromosomes[0]);
-            _animalController.transform.LookAt(_foodObject[0].transform.position);
+            _animalController.transform.position = Vector3.MoveTowards(_animalController.transform.position, _foodObjects[0].transform.position, Time.fixedDeltaTime * _animalController.AnimalDNA.Chromosomes[0]);
+            _animalController.transform.LookAt(_foodObjects[0].transform.position);
         }
         
+    }
+
+    private void Mating()
+    {
+        Debug.Log("Mating");
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (_currentState != States.Walking) return;
 
-        if (_animalController.CurrentEnergy <= 750 &&  other.GetComponentInParent<FoodObject>())
+        if (_animalController.CurrentEnergy <= 500 &&  other.GetComponentInParent<FoodObject>())
         {
-            _foodObject.Add(other.gameObject);
+            _foodObjects.Add(other.gameObject);
             _currentState = States.Eating;
+        }
+
+        if(_animalController.ReadyToMate && other.CompareTag("BodyCollider") && _animalController.AnimalManager.AnimalsReadyToMate.Contains(other.GetComponentInParent<AnimalDNA>().gameObject))
+        {
+            _mateObjects.Add(other.gameObject);
+            _currentState = States.Mating;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (_foodObject.Count <= 0) return;
+        if (_foodObjects.Count <= 0) return;
 
         if (other.GetComponentInParent<FoodObject>())
         {
-            if (_foodObject.Contains(other.gameObject))
+            if (_foodObjects.Contains(other.gameObject))
             {
-                _foodObject.Remove(other.gameObject);
+                _foodObjects.Remove(other.gameObject);
             }
         }
     }

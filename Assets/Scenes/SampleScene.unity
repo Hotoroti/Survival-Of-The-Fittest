@@ -437,6 +437,7 @@ MonoBehaviour:
   _initialAnimalCount: 50
   _animalObj: {fileID: 6761660954548527424, guid: 8cad213cdf83da54cb8826e067855e72, type: 3}
   _floor: {fileID: 732676273}
+  AnimalsReadyToMate: []
 --- !u!1 &856993146
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,7 +483,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speedUp: 1
-  _speed: 10
+  _speed: 5
 --- !u!1 &872282733
 GameObject:
   m_ObjectHideFlags: 0
