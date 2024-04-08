@@ -45,9 +45,9 @@ public class NewAnimalController : MonoBehaviour
         else
         {
             var targetMask = 1 << 7;
+            //Check if targetposition is on floor
             if(Physics.Raycast(new Vector3(_walkTarget.x, .1f, _walkTarget.z), Vector3.down, .5f, targetMask))
             {
-                Debug.Log("Hit Floor");
                 transform.position = Vector3.MoveTowards(transform.position, _walkTarget, Time.fixedDeltaTime * AnimalDNA.Chromosomes[0]);
                 transform.LookAt(_walkTarget);
             }

@@ -9,11 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3041468427578061131}
-  - component: {fileID: 5302913307179984797}
   - component: {fileID: 486739393601576491}
   - component: {fileID: 4963409184426468278}
   - component: {fileID: -4878330199470332713}
-  - component: {fileID: 3474071428194399828}
+  - component: {fileID: 4789566813793509401}
   m_Layer: 0
   m_Name: Animal
   m_TagString: Animal
@@ -37,28 +36,6 @@ Transform:
   - {fileID: 8109837292799255411}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!195 &5302913307179984797
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6761660954548527424}
-  m_Enabled: 0
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 10
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!54 &486739393601576491
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -128,7 +105,7 @@ MonoBehaviour:
   _senseCollider: {fileID: 4963409184426468278}
   _renderer: {fileID: 5315895118770544706}
   Chromosomes: []
---- !u!114 &3474071428194399828
+--- !u!114 &4789566813793509401
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,7 +114,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6761660954548527424}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d7aee36df1270245a8ed64f8d0320ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 48491699070750442829db4e56d33c84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _energy: 1000

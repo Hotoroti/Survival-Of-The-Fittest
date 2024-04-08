@@ -12,21 +12,15 @@ public class AnimalDNA : MonoBehaviour
 
     private void Awake()
     {
-        if (!AnimalManager.Instance.FirstGenerationPast)
-            FirstGenerationAnimals();
-        else
-            OtherGenerationAnimals();
-
+        
+        FirstGenerationAnimals();
         if (_gender == 0)
         {
             _renderer.material.color = Color.blue;
-            AnimalManager.Instance.AllMaleAnimals.Add(gameObject);
         }
         else if (_gender == 1)
         {
             _renderer.material.color = Color.magenta;
-            AnimalManager.Instance.AllFemaleAnimals.Add(gameObject);
-            AnimalManager.Instance.FemaleAnimalsToMate.Add(gameObject);
         }
 
         _senseCollider.radius = _sense;
@@ -49,7 +43,7 @@ public class AnimalDNA : MonoBehaviour
         _vore = 0;
     }
 
-    public void OtherGenerationAnimals()
+    /*public void OtherGenerationAnimals()
     {
         var parentController = transform.parent.gameObject.GetComponent<AnimalController>();
         transform.parent = AnimalManager.Instance.Parent.transform;
@@ -65,5 +59,5 @@ public class AnimalDNA : MonoBehaviour
         _sense = Random.Range(0, 101) < 10 ? _sense : _sense * Random.Range(0.8f, 1.2f);
 
         _size /= _size;
-    }
+    }*/
 }
