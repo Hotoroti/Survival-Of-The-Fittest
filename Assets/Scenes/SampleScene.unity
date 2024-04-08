@@ -123,93 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &27124574
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 27124575}
-  - component: {fileID: 27124576}
-  - component: {fileID: 27124577}
-  - component: {fileID: 27124578}
-  m_Layer: 0
-  m_Name: Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &27124575
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 27124574}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.8056545, y: 23.799767, z: -0.037132185}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &27124576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 27124574}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 174317f964542da4095d2a78919de595, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sizeX: 100
-  _sizeZ: 100
-  _spacing: 1
-  _gridObj: {fileID: 7377248720605093028, guid: c0a2e067220d4d74d98a2093e61c0df4, type: 3}
-  GridCells: []
---- !u!114 &27124577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 27124574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d64a6c889d54df44e8173a979e458802, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxActivateFoodCount: 5
-  _generateNewFood: 1
-  ActivateFoods: []
-  DeactivatedFoods: []
---- !u!114 &27124578
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 27124574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7114597166118e4f8776250d4c5f4f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animalOBJ: {fileID: 6761660954548527424, guid: 8cad213cdf83da54cb8826e067855e72, type: 3}
-  _animalSpawnCount: 10
-  Parent: {fileID: 0}
-  Animals: []
-  AllFemaleAnimals: []
-  AllMaleAnimals: []
-  FemaleAnimalsToMate: []
-  FirstGenerationPast: 0
 --- !u!1 &108426689
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +389,7 @@ MonoBehaviour:
   _sizeX: 50
   _sizeZ: 50
   _spacing: 5
-  _gridObj: {fileID: 5868727184012830471, guid: 27c2d685b576b8b42b85547d2d8921bf, type: 3}
+  _gridObj: {fileID: 5868727184012830471, guid: 52dc8051f3c5c1545ac208f787f526c8, type: 3}
   GridCells: []
 --- !u!4 &732676274
 Transform:
@@ -533,7 +446,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 856993148}
-  - component: {fileID: 856993147}
+  - component: {fileID: 856993149}
   m_Layer: 0
   m_Name: Helper
   m_TagString: Untagged
@@ -541,20 +454,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &856993147
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856993146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf0cb6a0e70e91b499ce5061b72af020, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speedUp: 1
-  _speed: 5
 --- !u!4 &856993148
 Transform:
   m_ObjectHideFlags: 0
@@ -570,6 +469,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &856993149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856993146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7416a29dbba848744b1ac0cfb849b801, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speedUp: 1
+  _speed: 10
 --- !u!1 &872282733
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,4 +616,3 @@ SceneRoots:
   - {fileID: 872282734}
   - {fileID: 856993148}
   - {fileID: 732676274}
-  - {fileID: 27124575}

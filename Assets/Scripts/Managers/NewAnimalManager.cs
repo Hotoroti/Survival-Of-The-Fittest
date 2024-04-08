@@ -18,4 +18,11 @@ public class NewAnimalManager : MonoBehaviour
             _animals.Add(Instantiate(_animalObj, _floor.GridCells[Random.Range(0, _floor.GridCells.Count)].transform.position, Quaternion.identity, parent.transform));
         }
     }
+
+    public void AnimalDied(GameObject animal)
+    {
+        _animals.Remove(animal);
+
+        Destroy(animal);
+    }
 }

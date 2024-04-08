@@ -4,10 +4,12 @@ public class FoodObject : MonoBehaviour
 {
     [SerializeField] private GameObject _foodObj;
 
+    private NewFoodManager _foodManager;
     public bool IsFood { get; set; }
 
     private void Start()
     {
+        _foodManager = GetComponentInParent<NewFoodManager>();
         ShowFood();
     }
 
@@ -24,5 +26,6 @@ public class FoodObject : MonoBehaviour
     {
         IsFood = false;
         ShowFood();
+        _foodManager.GenerateNewFood(this);
     }
 }

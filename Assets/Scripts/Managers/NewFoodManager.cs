@@ -35,23 +35,24 @@ public class NewFoodManager : MonoBehaviour
         }
     }
 
-    public void GenerateNewFood(FoodObject eatenFood)
+    private void FixedUpdate()
     {
-        int randValue = Random.Range(0, DeactivatedFoodList.Count);
+        if (_activeFoodList.Count >= _maxAvailableFood) return;
 
+        int randValue = Random.Range(0, DeactivatedFoodList.Count);
         var tempObj = DeactivatedFoodList[randValue];
         DeactivatedFoodList.RemoveAt(randValue);
 
         tempObj.GetComponent<FoodObject>().IsFood = true;
         tempObj.GetComponent<FoodObject>().ShowFood();
 
+        _activeFoodList.Add(tempObj);
+    }
+
+    public void GenerateNewFood(FoodObject eatenFood)
+    {      
         _activeFoodList.Remove(eatenFood.gameObject);
         DeactivatedFoodList.Add(eatenFood.gameObject);
-        eatenFood.IsFood = false;
-        eatenFood.ShowFood();
-
-
-        _activeFoodList.Add(tempObj);
     }
 
 }
