@@ -32,7 +32,7 @@ public class AnimalDNA : MonoBehaviour
 
         _senseCollider.radius = _sense;
 
-        _speed /= _size;
+        _speed /= (_size/2);
         //Chromosome 0 = speed
         //Chromosome 1 = _size
         //Chromosome 2 = _sense

@@ -129,7 +129,7 @@ public  class AnimalState : MonoBehaviour
     {
         if (other == null || CurrentState != States.Walking) return;
 
-        if (_animalController.CurrentEnergy <= 500 && other.CompareTag("Food"))
+        if (_animalController.CurrentEnergy <= 800 && other.CompareTag("Food"))
         {
             _foodObjects.Add(other.transform.parent.gameObject);
             CurrentState = States.Eating;

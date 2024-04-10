@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _energy: 1000
-  _fitnessScoreReadyToMate: 100
+  _fitnessScoreReadyToMate: 200
 --- !u!114 &2630243815027051706
 MonoBehaviour:
   m_ObjectHideFlags: 0

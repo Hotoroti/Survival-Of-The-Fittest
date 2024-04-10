@@ -38,14 +38,22 @@ public class NewFoodManager : MonoBehaviour
     private void FixedUpdate()
     {
         if (_activeFoodList.Count >= _maxAvailableFood) return;
-        int randValue = Random.Range(0, DeactivatedFoodList.Count);
-        var tempObj = DeactivatedFoodList[randValue];
-        DeactivatedFoodList.RemoveAt(randValue);
 
-        tempObj.GetComponent<FoodObject>().IsFood = true;
-        tempObj.GetComponent<FoodObject>().ShowFood();
+        if(_activeFoodList.Count <= _maxAvailableFood * .25f)
+        {
+            for(int i = 0; i < _maxAvailableFood - _activeFoodList.Count; i++)
+            {
+                int randValue = Random.Range(0, DeactivatedFoodList.Count);
+                var tempObj = DeactivatedFoodList[randValue];
+                DeactivatedFoodList.RemoveAt(randValue);
 
-        _activeFoodList.Add(tempObj);
+                tempObj.GetComponent<FoodObject>().IsFood = true;
+                tempObj.GetComponent<FoodObject>().ShowFood();
+
+                _activeFoodList.Add(tempObj);
+            }
+        }
+       
     }
 
     public void GenerateNewFood(FoodObject eatenFood)
