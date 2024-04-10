@@ -21,13 +21,27 @@ public class AnimalDNA : MonoBehaviour
         else
             OtherGenerationAnimals();
 
-        if (_gender == 0)
+        if (_vore == 0)
         {
-            _renderer.material.color = Color.blue;
+            if (_gender == 0)
+            {
+                _renderer.material.color = Color.blue;
+            }
+            else if (_gender == 1)
+            {
+                _renderer.material.color = Color.magenta;
+            }
         }
-        else if (_gender == 1)
+        else
         {
-            _renderer.material.color = Color.magenta;
+            if (_gender == 0)
+            {
+                _renderer.material.color = Color.black;
+            }
+            else if (_gender == 1)
+            {
+                _renderer.material.color = Color.red;
+            }
         }
 
         _senseCollider.radius = _sense;
@@ -59,11 +73,12 @@ public class AnimalDNA : MonoBehaviour
         _size = Random.Range(0, 2) < 1 ? parentController.AnimalDNA.Chromosomes[1] : parentController.Mate.AnimalDNA.Chromosomes[1];
         _sense = Random.Range(0, 2) < 1 ? parentController.AnimalDNA.Chromosomes[2] : parentController.Mate.AnimalDNA.Chromosomes[2];
         _gender = Random.Range(0, 2);
-        _vore = 0;
+        _vore = parentController.AnimalDNA.Chromosomes[4];        
 
         _speed = Random.Range(0, 101) < 10 ? _speed : _speed * Random.Range(0.8f, 1.2f);
         _size = Random.Range(0, 101) < 10 ? _size : _size * Random.Range(0.8f, 1.2f);
         _sense = Random.Range(0, 101) < 10 ? _sense : _sense * Random.Range(0.8f, 1.2f);
+        _vore = parentController.AnimalDNA.Chromosomes[4] == 0 ? 0 : _animalManager.CanSpawnCarnivore == false ? 0 : Random.Range(0, 101) < 10 ? 1 : 0;
 
         _size /= _size;
 

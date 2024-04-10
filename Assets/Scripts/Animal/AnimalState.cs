@@ -129,20 +129,25 @@ public  class AnimalState : MonoBehaviour
     {
         if (other == null || CurrentState != States.Walking) return;
 
-        if (_animalController.CurrentEnergy <= 800 && other.CompareTag("Food"))
+        if (_animalController.AnimalDNA.Chromosomes[4] == 0 && _animalController.CurrentEnergy <= 800 && other.CompareTag("Food"))
         {
             _foodObjects.Add(other.transform.parent.gameObject);
             CurrentState = States.Eating;
         }
 
         if (_animalController.AnimalDNA.Chromosomes[3] == 0 &&_animalController.ReadyToMate && other.CompareTag("BodyCollider") && _animalController.AnimalManager.AnimalsReadyToMate.Contains(other.GetComponentInParent<AnimalDNA>().gameObject))
-        {
+        {            
             if (other.GetComponentInParent<NewAnimalController>().AnimalDNA.Chromosomes[3] == 1)
             {
-                _mateObjects.Add(other.GetComponentInParent<NewAnimalController>().gameObject);
-                CurrentState = States.Mating;
+                if (_animalController.AnimalDNA.Chromosomes[4] == other.GetComponentInParent<NewAnimalController>().AnimalDNA.Chromosomes[4])
+                {
+                    _mateObjects.Add(other.GetComponentInParent<NewAnimalController>().gameObject);
+                    CurrentState = States.Mating;
+                }
             }
         }
+
+       // if (_animalController.AnimalDNA.Chromosomes[4] == 1 && _animalController.CurrentEnergy <= 800 && other.CompareTag("BodyCollider"))
     }
 
     private void OnTriggerExit(Collider other)

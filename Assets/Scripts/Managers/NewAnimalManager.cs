@@ -7,6 +7,8 @@ public class NewAnimalManager : MonoBehaviour
     [SerializeField] private int _initialAnimalCount;
     [SerializeField] public GameObject AnimalObj;
     [SerializeField] private GenerateFloor _floor;
+
+    private float _timeActive;
     
     public List<GameObject> Animals = new List<GameObject>();
 
@@ -14,6 +16,8 @@ public class NewAnimalManager : MonoBehaviour
 
     public GameObject Parent { get; private set; }
     public bool IsNotFirstGeneration {  get; private set; }
+
+    public bool CanSpawnCarnivore { get; private set; }
     private void Start()
     {
         Parent = new GameObject("AnimalParent");
@@ -25,6 +29,12 @@ public class NewAnimalManager : MonoBehaviour
         IsNotFirstGeneration = true;
     }
 
+    private void FixedUpdate()
+    {
+        _timeActive += Time.deltaTime;
+
+        CanSpawnCarnivore = _timeActive >= 1000;
+    }
     public void AnimalDied(GameObject animal)
     {
         Animals.Remove(animal);
