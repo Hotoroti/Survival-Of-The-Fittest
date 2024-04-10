@@ -38,7 +38,6 @@ public class NewFoodManager : MonoBehaviour
     private void FixedUpdate()
     {
         if (_activeFoodList.Count >= _maxAvailableFood) return;
-
         int randValue = Random.Range(0, DeactivatedFoodList.Count);
         var tempObj = DeactivatedFoodList[randValue];
         DeactivatedFoodList.RemoveAt(randValue);

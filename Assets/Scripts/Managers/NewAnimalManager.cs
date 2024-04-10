@@ -5,25 +5,29 @@ using UnityEngine;
 public class NewAnimalManager : MonoBehaviour
 {
     [SerializeField] private int _initialAnimalCount;
-    [SerializeField] private GameObject _animalObj;
+    [SerializeField] public GameObject AnimalObj;
     [SerializeField] private GenerateFloor _floor;
     
-    private List<GameObject> _animals = new List<GameObject>();
+    public List<GameObject> Animals = new List<GameObject>();
 
     public List<GameObject> AnimalsReadyToMate = new List<GameObject>();
+
+    public GameObject Parent { get; private set; }
+    public bool IsNotFirstGeneration {  get; private set; }
     private void Start()
     {
-        var parent = new GameObject("AnimalParent");
-        parent.transform.parent = transform;
+        Parent = new GameObject("AnimalParent");
+        Parent.transform.parent = transform;
         for(int i = 0; i <_initialAnimalCount; i++)
         {
-            _animals.Add(Instantiate(_animalObj, _floor.GridCells[Random.Range(0, _floor.GridCells.Count)].transform.position, Quaternion.identity, parent.transform));
+            Animals.Add(Instantiate(AnimalObj, _floor.GridCells[Random.Range(0, _floor.GridCells.Count)].transform.position, Quaternion.identity, Parent.transform));
         }
+        IsNotFirstGeneration = true;
     }
 
     public void AnimalDied(GameObject animal)
     {
-        _animals.Remove(animal);
+        Animals.Remove(animal);
 
         Destroy(animal);
     }

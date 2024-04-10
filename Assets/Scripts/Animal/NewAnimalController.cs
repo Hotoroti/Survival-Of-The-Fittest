@@ -11,9 +11,11 @@ public class NewAnimalController : MonoBehaviour
     public AnimalDNA AnimalDNA { get; private set; }
     public float CurrentEnergy {  get; private set; }
     
-    public float FitnessScore {  get; private set; }
+    public float FitnessScore {  get; set; }
 
     public bool ReadyToMate {  get; set; }
+
+    public NewAnimalController Mate {  get; set; }
 
     private void Awake()
     {
