@@ -11,7 +11,25 @@ public class EnvironmentMaker : MonoBehaviour
 
     const int MAX_ATTEMPTS = 10;
 
+    public static EnvironmentMaker Instance { get; private set; }
+
     private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(Instance);
+            Debug.LogError("More then one Instance of the TimeSettings, destroy all");
+            return;
+        }
+        else
+        {
+            Instance = this;
+        }
+
+        CreateBushes();
+    }
+
+    private void CreateBushes()
     {
         GameObject parent = new GameObject("BushesParent");
         for (int i = 0; i < _bushCount; i++)
@@ -25,7 +43,7 @@ public class EnvironmentMaker : MonoBehaviour
                 float posZ = _bushesSpawnBox.bounds.center.z + Random.Range(-_bushesSpawnBox.bounds.extents.z, _bushesSpawnBox.bounds.extents.z);
                 spawnPos = new Vector3(posX, _bushesSpawnBox.transform.position.y, posZ);
 
-                if (!!!Physics.CheckSphere(spawnPos, _bushRadius, LayerMask.GetMask("Bush")))
+                if (!Physics.CheckSphere(spawnPos, _bushRadius, LayerMask.GetMask("Bush")))
                 {
                     validPos = true;
                     break;
@@ -40,8 +58,6 @@ public class EnvironmentMaker : MonoBehaviour
             {
                 Debug.Log("Could not spawn bush, because it overlaps with other bushes");
             }
-
-
         }
     }
 }
