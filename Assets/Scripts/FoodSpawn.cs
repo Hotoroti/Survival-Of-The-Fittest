@@ -46,7 +46,13 @@ public class FoodSpawn : MonoBehaviour
     void Start()
     {
         if (Random.Range(0, 10) % 3 == 1)
+        {
             GenerateFood();
+        }
+        else
+        {
+            _foodGenerateTime = Random.Range(_foodGenerateTimeMin, _foodGenerateTimeMax);
+        }
     }
 
     private void FixedUpdate()
