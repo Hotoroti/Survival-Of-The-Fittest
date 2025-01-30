@@ -29,7 +29,7 @@ public class FoodSpawn : MonoBehaviour
 
         if (validPos)
         {
-            Instantiate(_foodObj, foodPos, Quaternion.identity, transform);
+            Instantiate(_foodObj, foodPos, Quaternion.identity, EnvironmentMaker.Instance.FoodParent.transform);
             _foodGenerateTime = Random.Range(_foodGenerateTimeMin, _foodGenerateTimeMax);
         }
         else

@@ -11,6 +11,8 @@ public class EnvironmentMaker : MonoBehaviour
 
     const int MAX_ATTEMPTS = 10;
 
+    public GameObject FoodParent { get; private set; }
+
     public static EnvironmentMaker Instance { get; private set; }
 
     private void Awake()
@@ -25,6 +27,8 @@ public class EnvironmentMaker : MonoBehaviour
         {
             Instance = this;
         }
+
+        FoodParent = new GameObject("FoodParent");
 
         CreateBushes();
     }
