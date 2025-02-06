@@ -11,6 +11,9 @@ public class FoodSpawn : MonoBehaviour
 
     const int MAX_ATTEMPT = 10;
 
+    /// <summary>
+    /// Call this function to generate food
+    /// </summary>
     [ContextMenu("Create food")]
     private void GenerateFood()
     {
@@ -38,6 +41,9 @@ public class FoodSpawn : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Call this function to increase the time until some new food can be spawned
+    /// </summary>
     private void IncreaseTime()
     {
         _timeUntilSpawn += TimeSettings.Instance.DeltaTime;

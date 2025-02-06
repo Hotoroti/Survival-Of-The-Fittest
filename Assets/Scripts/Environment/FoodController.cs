@@ -15,6 +15,9 @@ public class FoodController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Call this function to increase the time the food has been alive
+    /// </summary>
     private void IncreaseTime()
     {
         _timeAlive += TimeSettings.Instance.DeltaTime;
