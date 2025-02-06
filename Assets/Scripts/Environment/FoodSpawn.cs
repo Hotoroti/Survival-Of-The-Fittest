@@ -20,7 +20,7 @@ public class FoodSpawn : MonoBehaviour
         {
             Vector2 randomPos = Random.insideUnitCircle * _foodSpawnRadius;
             foodPos = new Vector3(transform.position.x + randomPos.x, transform.position.y + .1f, transform.position.z + randomPos.y);
-            if (Physics.Raycast(foodPos, Vector3.down, 1f, LayerMask.GetMask("Ground")))
+            if (Utils.IsOnGround(foodPos))
             {
                 validPos = true;
                 break;

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class AnimalDNA : MonoBehaviour
 {
@@ -9,6 +10,13 @@ public class AnimalDNA : MonoBehaviour
     public float ReactionTime { get; private set; }
     public float Hunger { get; private set; }
     public int Gender { get; private set; }
+
+    public UnityEvent Initialise { get; private set; } = new UnityEvent();
+
+    private void Start()
+    {
+        SetChromosomes(500f, 11f, 11f, 111f);
+    }
 
     public void SetChromosomes(float life, float speed, float sense, float energy)
     {
@@ -21,6 +29,7 @@ public class AnimalDNA : MonoBehaviour
         };
 
         SetValues();
+        Initialise?.Invoke();
     }
 
     private void SetValues()
