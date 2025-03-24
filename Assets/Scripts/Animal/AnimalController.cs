@@ -2,15 +2,18 @@ using UnityEngine;
 
 public class AnimalController : MonoBehaviour
 {
-    [SerializeField] private AnimalDNA _dna;
+    [SerializeField] public AnimalDNA _dna;
+    [SerializeField] private SphereCollider _senseCollider;
 
     private float _matureRate;
     private float _currentEnergy;
+    private float _currentHunger;
     private float _baseEnergyConsumption;
     private bool _startMoving = false;
 
     private AnimalState _currentState = null;
     public float FitnessScore { get; private set; }
+    public float HungerScore { get; private set; }
 
     const float GROWTHFACTOR = 10f;
 
@@ -53,6 +56,31 @@ public class AnimalController : MonoBehaviour
     }
 
     /// <summary>
+    /// Call this function when you want to remove hunger from the organism
+    /// </summary>
+    /// <param name="hungerConsumption">The amount to remove from the hunger</param>
+    public void HungerConsumption(float hungerConsumption)
+    {
+        _currentHunger -= hungerConsumption * TimeSettings.Instance.DeltaTime;
+        if (_currentHunger >= _dna.Hunger * .75f)
+        {
+            HungerScore = 0;
+        }
+        else if (_currentHunger >= _dna.Hunger * .5f)
+        {
+            HungerScore = .33f;
+        }
+        else if (_currentHunger >= _dna.Hunger * .25f)
+        {
+            HungerScore = .66f;
+        }
+        else
+        {
+            HungerScore = 1f;
+        }
+    }
+
+    /// <summary>
     /// Call this function to initialise the controller values
     /// </summary>
     private void Initialise()
@@ -63,6 +91,8 @@ public class AnimalController : MonoBehaviour
 
         _matureRate = CalculateGrowthRate();
         _currentEnergy = _dna.Chromosomes["Energy"];
+        _currentHunger = _dna.Hunger;
+        _senseCollider.radius = _dna.Chromosomes["Sense"];
 
         _baseEnergyConsumption = _dna.Chromosomes["Sense"] / 10f;
 
@@ -70,6 +100,11 @@ public class AnimalController : MonoBehaviour
 
         _startMoving = true;
         _dna.Initialise.RemoveListener(Initialise);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        _currentState.OnTriggerEnter(other);
     }
 
     /// <summary>

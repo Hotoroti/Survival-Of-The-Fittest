@@ -13,9 +13,11 @@ public class AnimalDNA : MonoBehaviour
 
     public UnityEvent Initialise { get; private set; } = new UnityEvent();
 
+    private const float STARTHUNGER = 200f;
+
     private void Start()
     {
-        SetChromosomes(500f, 11f, 20f, 1000f);
+        SetChromosomes(500f, 11f, 10f, 1000f);
     }
 
     /// <summary>
@@ -48,6 +50,6 @@ public class AnimalDNA : MonoBehaviour
         Size = Chromosomes["Life"] / 100f;
         ReproductionRate = Chromosomes["Life"] / 2f;
         ReactionTime = Chromosomes["Sense"] * 2f;
-        Hunger = Chromosomes["Energy"] / 10f;
+        Hunger = STARTHUNGER - (Chromosomes["Energy"] / 10f);
     }
 }

@@ -65,4 +65,10 @@ public abstract class AnimalState
     /// Call this function when Exiting the state
     /// </summary>
     public abstract void OnExit();
+
+    /// <summary>
+    /// Call this function when something needed in the state is in the collider
+    /// </summary>
+    /// <param name="other">The other collider</param>
+    public abstract void OnTriggerEnter(Collider other);
 }

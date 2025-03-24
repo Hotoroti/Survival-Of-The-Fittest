@@ -21,10 +21,12 @@ public class RoamingState : AnimalState
             if (ArrivedAtTarget(_newPos))
             {
                 GetNewPosition();
+
             }
             else
             {
                 WalkTowards(_newPos);
+                controller.HungerConsumption(10);
             }
 
         }
@@ -33,6 +35,9 @@ public class RoamingState : AnimalState
             Debug.Log(Utils.IsOnGround(_newPos));
             GetNewPosition();
         }
+
+        if (controller.HungerScore >= .66f)
+            controller.SwitchState(new LookingForFoodState(controller, controller._dna, controller.gameObject));
     }
 
     public override void OnExit()
@@ -46,5 +51,9 @@ public class RoamingState : AnimalState
     {
         _newPos = (animalOBJ.transform.position + Random.insideUnitSphere * dna.Chromosomes["Sense"]);
         _newPos = new Vector3(_newPos.x, 0.1f, _newPos.z);
+    }
+
+    public override void OnTriggerEnter(Collider other)
+    {
     }
 }
