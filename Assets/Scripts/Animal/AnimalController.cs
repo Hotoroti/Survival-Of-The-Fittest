@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AnimalController : MonoBehaviour
@@ -14,6 +15,8 @@ public class AnimalController : MonoBehaviour
     private AnimalState _currentState = null;
     public float FitnessScore { get; private set; }
     public float HungerScore { get; private set; }
+
+    public Stack<Vector3> _foodPositions { get; private set; } = new Stack<Vector3>();
 
     const float GROWTHFACTOR = 10f;
 
@@ -104,6 +107,12 @@ public class AnimalController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("Food"))
+        {
+            _foodPositions.Push(other.transform.position);
+            Debug.Log("Added food to memory. Food Count: " + _foodPositions.Count);
+        }
+
         _currentState.OnTriggerEnter(other);
     }
 

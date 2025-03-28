@@ -21,7 +21,6 @@ public class RoamingState : AnimalState
             if (ArrivedAtTarget(_newPos))
             {
                 GetNewPosition();
-
             }
             else
             {

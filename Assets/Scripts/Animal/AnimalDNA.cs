@@ -13,7 +13,7 @@ public class AnimalDNA : MonoBehaviour
 
     public UnityEvent Initialise { get; private set; } = new UnityEvent();
 
-    private const float STARTHUNGER = 200f;
+    private const float STARTHUNGER = 1000f;
 
     private void Start()
     {
