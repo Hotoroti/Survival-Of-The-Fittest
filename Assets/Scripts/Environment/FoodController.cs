@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class FoodController : MonoBehaviour
 {
-    [SerializeField] private float _decayTime;
+    [SerializeField] private float _decayTimeDays;
     private float _timeAlive;
 
     private void FixedUpdate()
     {
         IncreaseTime();
 
-        if (_timeAlive >= _decayTime)
+        if (_timeAlive >= _decayTimeDays * TimeCycle.Instance.SecondsInDay)
         {
             Destroy(gameObject);
         }

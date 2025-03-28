@@ -5,6 +5,8 @@ public class TimeCycle : MonoBehaviour
 {
     [SerializeField] private int _secondsInDay, _daysInWeek, _weeksInMonth, _monthsInYear;
 
+    public int SecondsInDay => _secondsInDay;
+
     private float _seconds;
 
     public int Day { get; private set; }

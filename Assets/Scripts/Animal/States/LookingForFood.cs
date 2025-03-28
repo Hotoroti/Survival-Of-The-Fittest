@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class LookingForFoodState : AnimalState
 {
-    private Vector3 _targetPos = Vector3.zero;
+    private Vector3 _targetPos = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
     private GameObject _foodObj;
     private bool _foundFood = false;
     public LookingForFoodState(AnimalController controller, AnimalDNA dna, GameObject animalObject) : base(controller, dna, animalObject)
@@ -11,7 +11,6 @@ public class LookingForFoodState : AnimalState
 
     public override void OnEnter()
     {
-        Debug.Log(controller._foodPositions.Count);
         if (controller._foodPositions.Count > 0)
         {
             _targetPos = controller._foodPositions.Pop();
@@ -30,7 +29,14 @@ public class LookingForFoodState : AnimalState
             {
                 if (_foundFood)
                 {
-                    controller.SwitchState(new EatingState(controller, controller._dna, controller.gameObject, _foodObj));
+                    if (_foodObj.gameObject != null)
+                    {
+                        controller.SwitchState(new EatingState(controller, dna, animalOBJ, _foodObj));
+                    }
+                    else
+                    {
+                        GetNewPosition();
+                    }
                 }
                 else
                 {
@@ -40,7 +46,7 @@ public class LookingForFoodState : AnimalState
             else
             {
                 WalkTowards(_targetPos);
-                //controller.HungerConsumption(10);
+                controller.HungerConsumption(10);
             }
 
         }
@@ -55,9 +61,16 @@ public class LookingForFoodState : AnimalState
     {
         if (other.CompareTag("Food"))
         {
-            _targetPos = other.transform.position;
-            _foodObj = other.gameObject;
-            _foundFood = true;
+            float distanceNewFood = (controller.transform.position - other.transform.position).sqrMagnitude;
+            float oldFood = _foundFood ? (controller.transform.position - _targetPos).sqrMagnitude : float.MaxValue;
+
+            if (distanceNewFood < oldFood)
+            {
+                Debug.Log("new Food");
+                _targetPos = other.transform.position;
+                _foodObj = other.gameObject;
+                _foundFood = true;
+            }
         }
     }
 

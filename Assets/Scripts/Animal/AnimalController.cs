@@ -36,6 +36,26 @@ public class AnimalController : MonoBehaviour
         FitnessScore += TimeSettings.Instance.DeltaTime;
     }
 
+
+    /// <summary>
+    /// Call this function when you want to recharge the hunger stats
+    /// </summary>
+    public void RechargeHunger()
+    {
+        HungerScore = 0;
+        _currentHunger = _dna.Hunger;
+    }
+
+    /// <summary>
+    /// Call this function when you want to replenish energy
+    /// </summary>
+    /// <param name="replenishRate">The amount it needs to replenish per second</param>
+    public void ReplenishEnergy(float replenishRate)
+    {
+        var currentRate = _currentEnergy / _dna.Chromosomes["Energy"] + replenishRate * TimeSettings.Instance.DeltaTime;
+        _currentEnergy = Mathf.Lerp(_currentEnergy, _dna.Chromosomes["Energy"], replenishRate * TimeSettings.Instance.DeltaTime);
+    }
+
     /// <summary>
     /// Call this function when you want to switch the states of the Organism
     /// </summary>
@@ -110,7 +130,6 @@ public class AnimalController : MonoBehaviour
         if (other.CompareTag("Food"))
         {
             _foodPositions.Push(other.transform.position);
-            Debug.Log("Added food to memory. Food Count: " + _foodPositions.Count);
         }
 
         _currentState.OnTriggerEnter(other);
