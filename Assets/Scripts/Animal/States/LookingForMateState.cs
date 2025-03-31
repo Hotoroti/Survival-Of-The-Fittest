@@ -10,16 +10,43 @@ public class LookingForMateState : AnimalState
     public override void OnEnter()
     {
         Debug.Log("Looking for Mate");
-        /*if (controller.MateOBJ == null)
-            GetNewPosition();*/
+        if (controller.MateOBJ == null)
+        {
+            GetNewPosition();
+            controller.SenseCollider.OnHerbivoreAnimalEnter += OnHerbivalAnimalEnter;
+        }
     }
 
     public override void OnExit()
     {
+        controller.SenseCollider.OnHerbivoreAnimalEnter -= OnHerbivalAnimalEnter;
     }
 
     public override void OnUpdate()
     {
+        if (controller.MateOBJ != null)
+        {
+            WalkTowards(_newPos);
+            controller.HungerConsumption(10);
+            _newPos = controller.MateOBJ.transform.position;
+            return;
+        }
+
+        if (Utils.IsOnGround(_newPos))
+        {
+            if (ArrivedAtTarget(_newPos))
+            {
+                GetNewPosition();
+            }
+            else
+            {
+                WalkTowards(_newPos);
+                controller.HungerConsumption(10);
+            }
+
+        }
+        else
+            GetNewPosition();
     }
 
     /// <summary>
@@ -29,6 +56,43 @@ public class LookingForMateState : AnimalState
     {
         _newPos = (animalOBJ.transform.position + Random.insideUnitSphere * dna.Chromosomes["Sense"]);
         _newPos = new Vector3(_newPos.x, 0.1f, _newPos.z);
+    }
+
+    private void OnHerbivalAnimalEnter(GameObject animal)
+    {
+        AnimalController otherAnimalController = animal.GetComponent<AnimalController>();
+
+        if (otherAnimalController == null)
+        {
+            Debug.Log("Could not return AnimalController");
+            return;
+        }
+
+        if (otherAnimalController.Dna.Gender == dna.Gender)
+        {
+            Debug.Log("Same Gender");
+            return;
+        }
+
+        if (!otherAnimalController.HasMatured)
+        {
+            Debug.Log("Was not yet mature");
+            return;
+        }
+
+        if (otherAnimalController.MateOBJ != null)
+        {
+            Debug.Log("Already has a Mate");
+            if (otherAnimalController.MateOBJ != animalOBJ)
+            {
+                controller.MateOBJ = null;
+            }
+            return;
+        }
+
+        controller.MateOBJ = animal;
+        otherAnimalController.MateOBJ = animalOBJ;
+        Debug.Log("Found Mate");
     }
 
 }

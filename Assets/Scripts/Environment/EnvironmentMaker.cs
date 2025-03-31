@@ -29,11 +29,9 @@ public class EnvironmentMaker : MonoBehaviour
         }
 
         FoodParent = new GameObject("FoodParent");
-
-        CreateBushes();
     }
 
-    private void CreateBushes()
+    public void CreateBushes()
     {
         GameObject parent = new GameObject("BushesParent");
         for (int i = 0; i < _bushCount; i++)

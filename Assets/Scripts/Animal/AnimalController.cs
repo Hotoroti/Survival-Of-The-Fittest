@@ -117,6 +117,19 @@ public class AnimalController : MonoBehaviour
         }
     }
 
+    public void SpawnChild(AnimalController otherParent)
+    {
+        GameObject child = Instantiate(this.gameObject, transform.position, Quaternion.identity);
+
+        AnimalDNA childDna = child.GetComponent<AnimalDNA>();
+
+        if (childDna == null)
+        {
+            Debug.LogError("Child does not have DNA");
+            return;
+        }
+    }
+
     /// <summary>
     /// Call this function to initialise the controller values
     /// </summary>
@@ -137,10 +150,6 @@ public class AnimalController : MonoBehaviour
 
         _startMoving = true;
         Dna.Initialise.RemoveListener(Initialise);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
     }
 
     private void OnFoodEnter(GameObject food)

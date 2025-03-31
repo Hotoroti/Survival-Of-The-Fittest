@@ -15,11 +15,6 @@ public class AnimalDNA : MonoBehaviour
 
     private const float STARTHUNGER = 1000f;
 
-    private void Start()
-    {
-        SetChromosomes(100f, 11f, 10f, 1000f);
-    }
-
     /// <summary>
     /// Call this function to set the inheritable chromosomes of the Organism
     /// </summary>

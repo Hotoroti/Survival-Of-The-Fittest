@@ -14,7 +14,6 @@ public class EatingState : AnimalState
 
     public override void OnEnter()
     {
-        Debug.Log("Enter Eating State");
     }
 
     public override void OnExit()

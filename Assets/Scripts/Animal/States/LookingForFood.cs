@@ -67,7 +67,6 @@ public class LookingForFoodState : AnimalState
 
         if (distanceNewFood < oldFood)
         {
-            Debug.Log("new Food");
             _targetPos = food.transform.position;
             _foodObj = food.gameObject;
             _foundFood = true;
