@@ -16,6 +16,11 @@ public class RoamingState : AnimalState
 
     public override void OnUpdate()
     {
+        if (controller.ReadyToMate)
+            controller.SwitchState(new LookingForMateState(controller, dna, animalOBJ));
+        else if (controller.HungerScore >= .66f)
+            controller.SwitchState(new LookingForFoodState(controller, dna, animalOBJ));
+
         if (Utils.IsOnGround(_newPos))
         {
             if (ArrivedAtTarget(_newPos))
@@ -30,13 +35,7 @@ public class RoamingState : AnimalState
 
         }
         else
-        {
-            Debug.Log(Utils.IsOnGround(_newPos));
             GetNewPosition();
-        }
-
-        if (controller.HungerScore >= .66f)
-            controller.SwitchState(new LookingForFoodState(controller, controller._dna, controller.gameObject));
     }
 
     public override void OnExit()
@@ -52,7 +51,4 @@ public class RoamingState : AnimalState
         _newPos = new Vector3(_newPos.x, 0.1f, _newPos.z);
     }
 
-    public override void OnTriggerEnter(Collider other)
-    {
-    }
 }

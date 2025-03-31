@@ -21,10 +21,6 @@ public class EatingState : AnimalState
     {
     }
 
-    public override void OnTriggerEnter(Collider other)
-    {
-    }
-
     public override void OnUpdate()
     {
         if (!HasEating())

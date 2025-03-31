@@ -17,7 +17,7 @@ public class AnimalDNA : MonoBehaviour
 
     private void Start()
     {
-        SetChromosomes(500f, 11f, 10f, 1000f);
+        SetChromosomes(100f, 11f, 10f, 1000f);
     }
 
     /// <summary>

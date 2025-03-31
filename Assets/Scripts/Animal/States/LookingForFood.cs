@@ -15,10 +15,13 @@ public class LookingForFoodState : AnimalState
         {
             _targetPos = controller._foodPositions.Pop();
         }
+
+        controller.SenseCollider.OnFoodEnter += OnFoodEnter;
     }
 
     public override void OnExit()
     {
+        controller.SenseCollider.OnFoodEnter -= OnFoodEnter;
     }
 
     public override void OnUpdate()
@@ -57,21 +60,19 @@ public class LookingForFoodState : AnimalState
         }
     }
 
-    public override void OnTriggerEnter(Collider other)
+    public void OnFoodEnter(GameObject food)
     {
-        if (other.CompareTag("Food"))
-        {
-            float distanceNewFood = (controller.transform.position - other.transform.position).sqrMagnitude;
-            float oldFood = _foundFood ? (controller.transform.position - _targetPos).sqrMagnitude : float.MaxValue;
+        float distanceNewFood = (controller.transform.position - food.transform.position).sqrMagnitude;
+        float oldFood = _foundFood ? (controller.transform.position - _targetPos).sqrMagnitude : float.MaxValue;
 
-            if (distanceNewFood < oldFood)
-            {
-                Debug.Log("new Food");
-                _targetPos = other.transform.position;
-                _foodObj = other.gameObject;
-                _foundFood = true;
-            }
+        if (distanceNewFood < oldFood)
+        {
+            Debug.Log("new Food");
+            _targetPos = food.transform.position;
+            _foodObj = food.gameObject;
+            _foundFood = true;
         }
+
     }
 
     /// <summary>

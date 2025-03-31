@@ -3,26 +3,34 @@ using UnityEngine;
 
 public class AnimalController : MonoBehaviour
 {
-    [SerializeField] public AnimalDNA _dna;
+    [SerializeField] public AnimalDNA Dna;
     [SerializeField] private SphereCollider _senseCollider;
 
     private float _matureRate;
     private float _currentEnergy;
     private float _currentHunger;
     private float _baseEnergyConsumption;
+    private float _currentMateRate;
     private bool _startMoving = false;
 
     private AnimalState _currentState = null;
     public float FitnessScore { get; private set; }
     public float HungerScore { get; private set; }
+    public bool HasMatured { get; private set; } = false;
+    public bool ReadyToMate { get; private set; } = false;
 
+
+    public GameObject MateOBJ = null;
+    public SenseColliderScript SenseCollider;
     public Stack<Vector3> _foodPositions { get; private set; } = new Stack<Vector3>();
 
     const float GROWTHFACTOR = 10f;
 
     private void Awake()
     {
-        _dna.Initialise.AddListener(Initialise);
+        Dna.Initialise.AddListener(Initialise);
+
+        SenseCollider.OnFoodEnter += OnFoodEnter;
     }
 
     public void FixedUpdate()
@@ -34,6 +42,12 @@ public class AnimalController : MonoBehaviour
             _currentState.OnUpdate();
 
         FitnessScore += TimeSettings.Instance.DeltaTime;
+
+        if (HasMatured)
+        {
+            _currentMateRate += TimeSettings.Instance.DeltaTime;
+            ReadyToMate = _currentMateRate >= Dna.ReproductionRate;
+        }
     }
 
 
@@ -43,7 +57,7 @@ public class AnimalController : MonoBehaviour
     public void RechargeHunger()
     {
         HungerScore = 0;
-        _currentHunger = _dna.Hunger;
+        _currentHunger = Dna.Hunger;
     }
 
     /// <summary>
@@ -52,8 +66,8 @@ public class AnimalController : MonoBehaviour
     /// <param name="replenishRate">The amount it needs to replenish per second</param>
     public void ReplenishEnergy(float replenishRate)
     {
-        var currentRate = _currentEnergy / _dna.Chromosomes["Energy"] + replenishRate * TimeSettings.Instance.DeltaTime;
-        _currentEnergy = Mathf.Lerp(_currentEnergy, _dna.Chromosomes["Energy"], replenishRate * TimeSettings.Instance.DeltaTime);
+        var currentRate = _currentEnergy / Dna.Chromosomes["Energy"] + replenishRate * TimeSettings.Instance.DeltaTime;
+        _currentEnergy = Mathf.Lerp(_currentEnergy, Dna.Chromosomes["Energy"], replenishRate * TimeSettings.Instance.DeltaTime);
     }
 
     /// <summary>
@@ -85,15 +99,15 @@ public class AnimalController : MonoBehaviour
     public void HungerConsumption(float hungerConsumption)
     {
         _currentHunger -= hungerConsumption * TimeSettings.Instance.DeltaTime;
-        if (_currentHunger >= _dna.Hunger * .75f)
+        if (_currentHunger >= Dna.Hunger * .75f)
         {
             HungerScore = 0;
         }
-        else if (_currentHunger >= _dna.Hunger * .5f)
+        else if (_currentHunger >= Dna.Hunger * .5f)
         {
             HungerScore = .33f;
         }
-        else if (_currentHunger >= _dna.Hunger * .25f)
+        else if (_currentHunger >= Dna.Hunger * .25f)
         {
             HungerScore = .66f;
         }
@@ -108,32 +122,33 @@ public class AnimalController : MonoBehaviour
     /// </summary>
     private void Initialise()
     {
-        transform.localScale = new Vector3(_dna.Size * .25f, _dna.Size * .25f, _dna.Size * .25f);
+        transform.localScale = new Vector3(Dna.Size * .25f, Dna.Size * .25f, Dna.Size * .25f);
 
         TimeCycle.Instance.DayFinished.AddListener(Mature);
 
         _matureRate = CalculateGrowthRate();
-        _currentEnergy = _dna.Chromosomes["Energy"];
-        _currentHunger = _dna.Hunger;
-        _senseCollider.radius = _dna.Chromosomes["Sense"];
+        _currentEnergy = Dna.Chromosomes["Energy"];
+        _currentHunger = Dna.Hunger;
+        _senseCollider.radius = Dna.Chromosomes["Sense"];
 
-        _baseEnergyConsumption = _dna.Chromosomes["Sense"] / 10f;
+        _baseEnergyConsumption = Dna.Chromosomes["Sense"] / 10f;
 
-        SwitchState(new RoamingState(this, _dna, gameObject));
+        SwitchState(new RoamingState(this, Dna, gameObject));
 
         _startMoving = true;
-        _dna.Initialise.RemoveListener(Initialise);
+        Dna.Initialise.RemoveListener(Initialise);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Food"))
-        {
-            _foodPositions.Push(other.transform.position);
-        }
-
-        _currentState.OnTriggerEnter(other);
     }
+
+    private void OnFoodEnter(GameObject food)
+    {
+        _foodPositions.Push(food.transform.position);
+        Debug.Log("Enterd food into stack");
+    }
+
 
     /// <summary>
     /// Call this function when you want to mature the organism
@@ -142,9 +157,10 @@ public class AnimalController : MonoBehaviour
     {
         transform.localScale = new Vector3(transform.localScale.x + _matureRate, transform.localScale.y + +_matureRate, transform.localScale.z + +_matureRate);
 
-        if (transform.localScale.x >= _dna.Size)
+        if (transform.localScale.x >= Dna.Size)
         {
-            transform.localScale = new Vector3(_dna.Size, _dna.Size, _dna.Size);
+            transform.localScale = new Vector3(Dna.Size, Dna.Size, Dna.Size);
+            HasMatured = true;
             TimeCycle.Instance.DayFinished.RemoveListener(Mature);
         }
     }
@@ -155,7 +171,7 @@ public class AnimalController : MonoBehaviour
     /// <returns>The size of the growth rate, the bigger the life the slower the rate</returns>
     private float CalculateGrowthRate()
     {
-        return GROWTHFACTOR / _dna.Chromosomes["Life"];
+        return GROWTHFACTOR / Dna.Chromosomes["Life"];
     }
 
 }
