@@ -20,7 +20,7 @@ public class AnimalController : MonoBehaviour
     public bool ReadyToMate { get; private set; } = false;
 
 
-    public GameObject MateOBJ = null;
+    public AnimalController MateOBJ = null;
     public SenseColliderScript SenseCollider;
     public Stack<Vector3> _foodPositions { get; private set; } = new Stack<Vector3>();
 
@@ -48,6 +48,11 @@ public class AnimalController : MonoBehaviour
             _currentMateRate += TimeSettings.Instance.DeltaTime;
             ReadyToMate = _currentMateRate >= Dna.ReproductionRate;
         }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        _currentState.OnTriggerEnter(other);
     }
 
 

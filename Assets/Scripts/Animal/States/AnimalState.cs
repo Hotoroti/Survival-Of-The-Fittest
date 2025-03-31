@@ -51,6 +51,10 @@ public abstract class AnimalState
         controller.EnergyConsumption(energyConsumption);
     }
 
+    public virtual void OnTriggerEnter(Collider other)
+    {
+    }
+
     /// <summary>
     /// Call this function when entering a State
     /// </summary>

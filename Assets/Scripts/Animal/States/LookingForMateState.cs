@@ -26,8 +26,13 @@ public class LookingForMateState : AnimalState
     {
         if (controller.MateOBJ != null)
         {
-            WalkTowards(_newPos);
+            WalkTowards(controller.MateOBJ.transform.position);
             controller.HungerConsumption(10);
+            if (ArrivedAtTarget(controller.MateOBJ.transform.position))
+            {
+                controller.SwitchState(new MatingState(controller, dna, animalOBJ));
+            }
+
             _newPos = controller.MateOBJ.transform.position;
             return;
         }
@@ -90,8 +95,8 @@ public class LookingForMateState : AnimalState
             return;
         }
 
-        controller.MateOBJ = animal;
-        otherAnimalController.MateOBJ = animalOBJ;
+        controller.MateOBJ = otherAnimalController;
+        otherAnimalController.MateOBJ = controller;
         Debug.Log("Found Mate");
     }
 
