@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e72b3a33f240ab44bfb27e8bee0484c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _foodGenerateTimeMin: 50
-  _foodGenerateTimeMax: 500
+  _foodGenerateTimeMin: 30
+  _foodGenerateTimeMax: 210
   _foodSpawnRadius: 2
   _foodObj: {fileID: 7385206886294699411, guid: 85cc58a16da8f6c4d8721ded51b72a19, type: 3}

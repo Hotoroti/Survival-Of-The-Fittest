@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AnimalController : MonoBehaviour
 {
     [SerializeField] public AnimalDNA Dna;
     [SerializeField] private SphereCollider _senseCollider;
+    [SerializeField] private MeshRenderer _renderer;
 
     private float _matureRate;
     private float _currentEnergy;
@@ -49,12 +51,6 @@ public class AnimalController : MonoBehaviour
             ReadyToMate = _currentMateRate >= Dna.ReproductionRate;
         }
     }
-
-    public void OnTriggerEnter(Collider other)
-    {
-        _currentState.OnTriggerEnter(other);
-    }
-
 
     /// <summary>
     /// Call this function when you want to recharge the hunger stats
@@ -122,19 +118,11 @@ public class AnimalController : MonoBehaviour
         }
     }
 
-    public void SpawnChild(AnimalController otherParent)
+    public void HadMated()
     {
-        GameObject child = Instantiate(this.gameObject, transform.position, Quaternion.identity);
-
-        AnimalDNA childDna = child.GetComponent<AnimalDNA>();
-
-        if (childDna == null)
-        {
-            Debug.LogError("Child does not have DNA");
-            return;
-        }
+        _currentMateRate = 0f;
+        SwitchState(new RoamingState(this, Dna, gameObject));
     }
-
     /// <summary>
     /// Call this function to initialise the controller values
     /// </summary>
@@ -150,6 +138,32 @@ public class AnimalController : MonoBehaviour
         _senseCollider.radius = Dna.Chromosomes["Sense"];
 
         _baseEnergyConsumption = Dna.Chromosomes["Sense"] / 10f;
+
+        if (Dna.Chromosomes.Count == 0)
+            return;
+
+        var highestChromosome = Dna.Chromosomes.OrderByDescending(pair => pair.Value).First();
+        string highestTrait = highestChromosome.Key;
+        float highestValue = highestChromosome.Value;
+
+        float normalizedValue = Mathf.Clamp01(highestValue / 1000f);
+
+        Color genderTint = Dna.Gender switch
+        {
+            1 => new Color(0.3f, 0.3f, 1.0f), //More blue for males
+            0 => new Color(1.0f, 0.3f, 0.3f) //More red for female
+        };
+
+        Color traitColor = highestTrait switch
+        {
+            "Life" => new Color(0, normalizedValue, 0),        // Green
+            "WalkingSpeed" => new Color(0, 0, normalizedValue),       // Blue
+            "Sense" => new Color(normalizedValue, 0, normalizedValue), // Purple
+            "Energy" => new Color(0, normalizedValue, normalizedValue), // Cyan
+            _ => _renderer.material.color // Default if trait is unknown
+        };
+
+        _renderer.material.color = traitColor * 0.7f + genderTint * 0.3f; // 70% trait, 30% gender influence
 
         SwitchState(new RoamingState(this, Dna, gameObject));
 

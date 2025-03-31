@@ -9,9 +9,17 @@ public class Settings : MonoBehaviour
 
 
     [SerializeField] private GameObject _animalOBJ;
-    [SerializeField] private Vector2 _minMaxLife, _minMaxSpeed, _minMaxSense, _minMaxEnergy;
+    [SerializeField, Tooltip("The start values for the first organisms that the random value will be in between")] private Vector2 _minMaxLife, _minMaxSpeed, _minMaxSense, _minMaxEnergy;
+    [SerializeField, Tooltip("The negative and positive mutation values")] private Vector2 _mutationMultiplier;
+    [SerializeField] private float _mateTime;
+
+    public float MateTime => _mateTime;
     public int MutationChangeMax => _mutationChange;
     public int AmountOfAnimals => _amountOfAnimals;
+    public Vector2 MutationMultiplier => _mutationMultiplier;
+    public GameObject AnimalObject => _animalOBJ;
+
+    public GameObject AnimalParent { get; private set; }
 
     private void Awake()
     {
@@ -23,6 +31,7 @@ public class Settings : MonoBehaviour
 
     private void Start()
     {
+        AnimalParent = new GameObject("AnimalParent");
         StartWorld();
     }
 
@@ -32,7 +41,7 @@ public class Settings : MonoBehaviour
 
         for (int i = 0; i < AmountOfAnimals; i++)
         {
-            AnimalDNA animalDNA = Instantiate(_animalOBJ, new Vector3(45, 0, 45), Quaternion.identity).GetComponent<AnimalDNA>();
+            AnimalDNA animalDNA = Instantiate(_animalOBJ, new Vector3(45, 0, 45), Quaternion.identity, AnimalParent.transform).GetComponent<AnimalDNA>();
 
             if (animalDNA == null)
             {

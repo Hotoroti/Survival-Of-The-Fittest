@@ -303,7 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e846f91b281ba54e8e0723ffdf70c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bushCount: 100
+  _bushCount: 150
   _bushRadius: 5
   _bush: {fileID: 9180096848054213991, guid: 502168a0b4b2cc94a821ae0564967829, type: 3}
   _bushesSpawnBox: {fileID: 1281910049}
@@ -319,13 +319,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23db48059fa260a44a2a5d1b6dfeceb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mutationChange: 13
-  _amountOfAnimals: 10
+  _mutationChange: 50
+  _amountOfAnimals: 100
   _animalOBJ: {fileID: 2394900920410169446, guid: d222181c646673c4a9e9aacdcbae9800, type: 3}
   _minMaxLife: {x: 100, y: 300}
   _minMaxSpeed: {x: 10, y: 50}
   _minMaxSense: {x: 1, y: 10}
   _minMaxEnergy: {x: 500, y: 1000}
+  _mutationMultiplier: {x: 0.97, y: 1.03}
+  _mateTime: 30
 --- !u!1 &108426689
 GameObject:
   m_ObjectHideFlags: 0

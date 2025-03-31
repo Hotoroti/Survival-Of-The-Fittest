@@ -30,7 +30,7 @@ public class LookingForMateState : AnimalState
             controller.HungerConsumption(10);
             if (ArrivedAtTarget(controller.MateOBJ.transform.position))
             {
-                controller.SwitchState(new MatingState(controller, dna, animalOBJ));
+                controller.SwitchState(new MatingState(controller, dna, animalOBJ, controller.MateOBJ));
             }
 
             _newPos = controller.MateOBJ.transform.position;

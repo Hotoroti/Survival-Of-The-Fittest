@@ -51,6 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Dna: {fileID: 2521878243778292905}
   _senseCollider: {fileID: 1842674802508317748}
+  _renderer: {fileID: 7840055512109821390}
   MateOBJ: {fileID: 0}
   SenseCollider: {fileID: 8188131093584081028}
 --- !u!114 &2521878243778292905
