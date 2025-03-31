@@ -22,6 +22,7 @@ public class MatingState : AnimalState
     {
         if (dna.Gender != 0)
             return;
+        controller.ReplenishEnergy(15f);
 
         _matingTimer += TimeSettings.Instance.DeltaTime;
 

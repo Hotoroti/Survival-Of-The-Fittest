@@ -3,7 +3,7 @@ using UnityEngine;
 public class RoamingState : AnimalState
 {
     private Vector3 _newPos = Vector3.zero;
-
+    private bool _slowMove = false;
     public RoamingState(AnimalController controller, AnimalDNA dna, GameObject animalObject) : base(controller, dna, animalObject)
     {
     }
@@ -21,6 +21,24 @@ public class RoamingState : AnimalState
         else if (controller.HungerScore >= .66f)
             controller.SwitchState(new LookingForFoodState(controller, dna, animalOBJ));
 
+
+        if (controller.CurrentEnergy < dna.Chromosomes["Energy"] * .25f)
+        {
+            currentMovementSpeed = _baseMovementSpeed * 0.5f;
+            _slowMove = true;
+        }
+
+        if (_slowMove)
+        {
+            controller.ReplenishEnergy(50f);
+            controller.HungerConsumption(5f);
+            if (controller.CurrentEnergy >= dna.Chromosomes["Energy"] * .85f)
+            {
+                _slowMove = false;
+                currentMovementSpeed = _baseMovementSpeed;
+            }
+        }
+
         if (Utils.IsOnGround(_newPos))
         {
             if (ArrivedAtTarget(_newPos))
@@ -29,8 +47,14 @@ public class RoamingState : AnimalState
             }
             else
             {
+
+                if (!_slowMove)
+                {
+                    controller.HungerConsumption(10f);
+                }
+
                 WalkTowards(_newPos);
-                controller.HungerConsumption(10);
+
             }
 
         }

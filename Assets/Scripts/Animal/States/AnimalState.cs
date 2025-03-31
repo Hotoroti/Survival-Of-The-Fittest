@@ -7,7 +7,7 @@ public abstract class AnimalState
     protected AnimalDNA dna;
     protected GameObject animalOBJ;
 
-    private float _baseMovementSpeed;
+    protected readonly float _baseMovementSpeed;
     protected float currentMovementSpeed;
 
     public AnimalState(AnimalController controller,

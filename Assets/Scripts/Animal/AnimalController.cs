@@ -11,7 +11,7 @@ public class AnimalController : MonoBehaviour
     private float _matureRate;
     private float _currentEnergy;
     private float _currentHunger;
-    private float _baseEnergyConsumption;
+
     private float _currentMateRate;
     private float _currentLife;
     private bool _startMoving = false;
@@ -21,7 +21,8 @@ public class AnimalController : MonoBehaviour
     public float HungerScore { get; private set; }
     public bool HasMatured { get; private set; } = false;
     public bool ReadyToMate { get; private set; } = false;
-
+    public float CurrentEnergy => _currentEnergy;
+    public float BaseEnergyConsumption;
 
     public AnimalController MateOBJ = null;
     public SenseColliderScript SenseCollider;
@@ -68,8 +69,7 @@ public class AnimalController : MonoBehaviour
     /// <param name="replenishRate">The amount it needs to replenish per second</param>
     public void ReplenishEnergy(float replenishRate)
     {
-        var currentRate = _currentEnergy / Dna.Chromosomes["Energy"] + replenishRate * TimeSettings.Instance.DeltaTime;
-        _currentEnergy = Mathf.Lerp(_currentEnergy, Dna.Chromosomes["Energy"], replenishRate * TimeSettings.Instance.DeltaTime);
+        _currentEnergy += replenishRate * TimeSettings.Instance.DeltaTime;
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public class AnimalController : MonoBehaviour
     /// <param name="consumption">The amount that will be removed from the energy</param>
     public void EnergyConsumption(float consumption)
     {
-        _currentEnergy -= (_baseEnergyConsumption + consumption) * TimeSettings.Instance.DeltaTime;
+        _currentEnergy -= (BaseEnergyConsumption + consumption) * TimeSettings.Instance.DeltaTime;
     }
 
     /// <summary>
@@ -158,7 +158,7 @@ public class AnimalController : MonoBehaviour
         _currentHunger = Dna.Hunger;
         _senseCollider.radius = Dna.Chromosomes["Sense"];
 
-        _baseEnergyConsumption = Dna.Chromosomes["Sense"] / 10f;
+        BaseEnergyConsumption = Dna.Chromosomes["Sense"] / 10f;
         _currentLife = Dna.Chromosomes["Life"];
 
         if (Dna.Chromosomes.Count == 0)

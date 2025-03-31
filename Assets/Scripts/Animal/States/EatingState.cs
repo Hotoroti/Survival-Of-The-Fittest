@@ -25,6 +25,7 @@ public class EatingState : AnimalState
         if (!HasEating())
         {
             _eatTimer += TimeSettings.Instance.DeltaTime;
+            controller.ReplenishEnergy(50f);
             return;
         }
 
