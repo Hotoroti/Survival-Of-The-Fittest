@@ -28,11 +28,11 @@ public class SenseColliderScript : MonoBehaviour
 
         if (other.tag == "HerbivoreAnimal")
             if (OnHerbivoreAnimalEnter != null)
-                OnHerbivoreAnimalEnter(other.gameObject);
+                OnHerbivoreAnimalEnter(other.transform.parent.gameObject);
 
         if (other.tag == "CarnivoreAnimal")
             if (OnCarnivoreAnimalEnter != null)
-                OnCarnivoreAnimalEnter(other.gameObject);
+                OnCarnivoreAnimalEnter(other.transform.parent.gameObject);
 
     }
 
@@ -44,10 +44,10 @@ public class SenseColliderScript : MonoBehaviour
 
         if (other.tag == "HerbivoreAnimal")
             if (OnHerbivoreAnimalExit != null)
-                OnHerbivoreAnimalExit(other.gameObject);
+                OnHerbivoreAnimalExit(other.transform.parent.gameObject);
 
         if (other.tag == "CarnivoreAnimal")
             if (OnCarnivoreAnimalExit != null)
-                OnCarnivoreAnimalExit(other.gameObject);
+                OnCarnivoreAnimalExit(other.transform.parent.gameObject);
     }
 }

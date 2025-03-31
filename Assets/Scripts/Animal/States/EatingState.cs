@@ -46,7 +46,10 @@ public class EatingState : AnimalState
     {
         controller.RechargeHunger();
 
-        controller.SwitchState(new RoamingState(controller, dna, animalOBJ));
+        if (dna.Carnivore >= 1)
+            controller.SwitchState(new HuntingState(controller, dna, animalOBJ));
+        else
+            controller.SwitchState(new RoamingState(controller, dna, animalOBJ));
 
         GameObject.Destroy(_foodObj);
     }

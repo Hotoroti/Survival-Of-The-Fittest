@@ -320,7 +320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mutationChange: 50
-  _amountOfAnimals: 10
+  _amountOfAnimals: 100
   _amountOfCarnivoresToSpawn: 5
   _animalOBJ: {fileID: 2394900920410169446, guid: d222181c646673c4a9e9aacdcbae9800, type: 3}
   _minMaxLife: {x: 100, y: 300}
@@ -329,7 +329,7 @@ MonoBehaviour:
   _minMaxEnergy: {x: 500, y: 1000}
   _mutationMultiplier: {x: 0.97, y: 1.03}
   _mateTime: 30
-  _baseDamage: 10
+  _baseDamage: 5
 --- !u!1 &108426689
 GameObject:
   m_ObjectHideFlags: 0
