@@ -13,6 +13,7 @@ public class AnimalController : MonoBehaviour
     private float _currentHunger;
     private float _baseEnergyConsumption;
     private float _currentMateRate;
+    private float _currentLife;
     private bool _startMoving = false;
 
     private AnimalState _currentState = null;
@@ -115,6 +116,7 @@ public class AnimalController : MonoBehaviour
         else
         {
             HungerScore = 1f;
+            RemoveLifeValue(10f * TimeSettings.Instance.DeltaTime);
         }
     }
 
@@ -123,6 +125,25 @@ public class AnimalController : MonoBehaviour
         _currentMateRate = 0f;
         SwitchState(new RoamingState(this, Dna, gameObject));
     }
+
+    public void RemoveLifeValue(float amount)
+    {
+        _currentLife -= amount;
+
+        if (_currentLife < 0)
+        {
+            if (MateOBJ != null)
+            {
+                if (MateOBJ.MateOBJ != null)
+                {
+                    MateOBJ.MateOBJ = null;
+                }
+            }
+            Debug.Log("Destroyed GameObject");
+            gameObject.SetActive(false);
+        }
+    }
+
     /// <summary>
     /// Call this function to initialise the controller values
     /// </summary>
@@ -138,6 +159,7 @@ public class AnimalController : MonoBehaviour
         _senseCollider.radius = Dna.Chromosomes["Sense"];
 
         _baseEnergyConsumption = Dna.Chromosomes["Sense"] / 10f;
+        _currentLife = Dna.Chromosomes["Life"];
 
         if (Dna.Chromosomes.Count == 0)
             return;

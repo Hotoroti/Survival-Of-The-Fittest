@@ -29,7 +29,6 @@ public class MatingState : AnimalState
             return;
 
         SpawnChild(_mateController);
-        Debug.Log("Spawned Child");
 
         _mateController.HadMated();
         controller.HadMated();
@@ -55,7 +54,6 @@ public class MatingState : AnimalState
         if (Random.Range(0, 100) < Settings.Instance.MutationChangeMax)
         {
             float mutationValue = Random.Range(0, 2) < 1 ? Settings.Instance.MutationMultiplier.x : Settings.Instance.MutationMultiplier.y;
-            Debug.Log("Mutation Happened");
             switch (Random.Range(0, 4))
             {
                 case 0:
