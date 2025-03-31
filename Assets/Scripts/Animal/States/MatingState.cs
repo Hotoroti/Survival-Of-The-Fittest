@@ -72,6 +72,6 @@ public class MatingState : AnimalState
             }
         }
 
-        childDna.SetChromosomes(lifeValue, speedValue, senseValue, energyValue);
+        childDna.SetChromosomes(lifeValue, speedValue, senseValue, energyValue, dna.Carnivore);
     }
 }

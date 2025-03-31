@@ -11,6 +11,8 @@ public class AnimalDNA : MonoBehaviour
     public float Hunger { get; private set; }
     public int Gender { get; private set; }
 
+    public float Carnivore { get; private set; }
+
     public UnityEvent Initialise { get; private set; } = new UnityEvent();
 
     private const float STARTHUNGER = 1000f;
@@ -22,7 +24,7 @@ public class AnimalDNA : MonoBehaviour
     /// <param name="speed">The size of the walkingspeed chromosome</param>
     /// <param name="sense">The size of the sense chromosome</param>
     /// <param name="energy">The size of the energy chromosome</param>
-    public void SetChromosomes(float life, float speed, float sense, float energy)
+    public void SetChromosomes(float life, float speed, float sense, float energy, float carnivore)
     {
         Chromosomes = new Dictionary<string, float>()
         {
@@ -32,6 +34,7 @@ public class AnimalDNA : MonoBehaviour
             { "Energy", energy}
         };
 
+        SetCarnivoreLevel(carnivore);
         SetValues();
         Initialise?.Invoke();
     }
@@ -46,5 +49,10 @@ public class AnimalDNA : MonoBehaviour
         ReproductionRate = Chromosomes["Life"] / 2f;
         ReactionTime = Chromosomes["Sense"] * 2f;
         Hunger = STARTHUNGER - (Chromosomes["Energy"] / 10f);
+    }
+
+    public void SetCarnivoreLevel(float level)
+    {
+        Carnivore = level;
     }
 }

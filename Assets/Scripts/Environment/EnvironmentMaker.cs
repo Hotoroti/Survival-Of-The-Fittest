@@ -20,7 +20,6 @@ public class EnvironmentMaker : MonoBehaviour
         if (Instance != null)
         {
             Destroy(Instance);
-            Debug.LogError("More then one Instance of the TimeSettings, destroy all");
             return;
         }
         else
@@ -55,10 +54,6 @@ public class EnvironmentMaker : MonoBehaviour
             if (validPos)
             {
                 _bushes.Add(Instantiate(_bush, spawnPos, Quaternion.identity, parent.transform));
-            }
-            else
-            {
-                Debug.Log("Could not spawn bush, because it overlaps with other bushes");
             }
         }
     }

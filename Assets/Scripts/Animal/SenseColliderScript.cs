@@ -14,6 +14,12 @@ public class SenseColliderScript : MonoBehaviour
     public delegate void OnHerbivoreAnimalExitDelegate(GameObject animal);
     public OnHerbivoreAnimalExitDelegate OnHerbivoreAnimalExit;
 
+    public delegate void OnCarnivoreAnimalEnterDelegate(GameObject animal);
+    public OnCarnivoreAnimalEnterDelegate OnCarnivoreAnimalEnter;
+
+    public delegate void OnCarnivoreAnimalExitDelegate(GameObject animal);
+    public OnCarnivoreAnimalExitDelegate OnCarnivoreAnimalExit;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Food")
@@ -23,6 +29,10 @@ public class SenseColliderScript : MonoBehaviour
         if (other.tag == "HerbivoreAnimal")
             if (OnHerbivoreAnimalEnter != null)
                 OnHerbivoreAnimalEnter(other.gameObject);
+
+        if (other.tag == "CarnivoreAnimal")
+            if (OnCarnivoreAnimalEnter != null)
+                OnCarnivoreAnimalEnter(other.gameObject);
 
     }
 
@@ -35,5 +45,9 @@ public class SenseColliderScript : MonoBehaviour
         if (other.tag == "HerbivoreAnimal")
             if (OnHerbivoreAnimalExit != null)
                 OnHerbivoreAnimalExit(other.gameObject);
+
+        if (other.tag == "CarnivoreAnimal")
+            if (OnCarnivoreAnimalExit != null)
+                OnCarnivoreAnimalExit(other.gameObject);
     }
 }

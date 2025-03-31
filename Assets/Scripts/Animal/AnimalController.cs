@@ -21,11 +21,13 @@ public class AnimalController : MonoBehaviour
     public float HungerScore { get; private set; }
     public bool HasMatured { get; private set; } = false;
     public bool ReadyToMate { get; private set; } = false;
+    public bool IsDead { get; private set; }
     public float CurrentEnergy => _currentEnergy;
     public float BaseEnergyConsumption;
 
     public AnimalController MateOBJ = null;
     public SenseColliderScript SenseCollider;
+    public BodyColliderScript BodyCollider;
     public Stack<Vector3> _foodPositions { get; private set; } = new Stack<Vector3>();
 
     const float GROWTHFACTOR = 10f;
@@ -35,11 +37,13 @@ public class AnimalController : MonoBehaviour
         Dna.Initialise.AddListener(Initialise);
 
         SenseCollider.OnFoodEnter += OnFoodEnter;
+
+        IsDead = false;
     }
 
     public void FixedUpdate()
     {
-        if (!_startMoving)
+        if (!_startMoving || IsDead)
             return;
 
         if (_currentState != null)
@@ -139,8 +143,9 @@ public class AnimalController : MonoBehaviour
                     MateOBJ.MateOBJ = null;
                 }
             }
-            Debug.Log("Destroyed GameObject");
-            gameObject.SetActive(false);
+
+            IsDead = true;
+            RemoveListeners();
         }
     }
 
@@ -170,6 +175,12 @@ public class AnimalController : MonoBehaviour
 
         float normalizedValue = Mathf.Clamp01(highestValue / 1000f);
 
+        Color EatingTrait = Dna.Carnivore switch
+        {
+            0 => new Color(0, 1, 1),
+            1 => new Color(1, 0, 0)
+        };
+
         Color genderTint = Dna.Gender switch
         {
             1 => new Color(0.3f, 0.3f, 1.0f), //More blue for males
@@ -185,9 +196,18 @@ public class AnimalController : MonoBehaviour
             _ => _renderer.material.color // Default if trait is unknown
         };
 
-        _renderer.material.color = traitColor * 0.7f + genderTint * 0.3f; // 70% trait, 30% gender influence
+        _renderer.material.color = (traitColor * 0.7f + genderTint * 0.3f) * EatingTrait; // 70% trait, 30% gender influence
 
-        SwitchState(new RoamingState(this, Dna, gameObject));
+        if (Dna.Carnivore >= 1)
+        {
+            BodyCollider.gameObject.tag = "CarnivoreAnimal";
+            SwitchState(new HuntingState(this, Dna, gameObject));
+        }
+        else
+        {
+            BodyCollider.gameObject.tag = "HerbivoreAnimal";
+            SwitchState(new RoamingState(this, Dna, gameObject));
+        }
 
         _startMoving = true;
         Dna.Initialise.RemoveListener(Initialise);
@@ -196,7 +216,6 @@ public class AnimalController : MonoBehaviour
     private void OnFoodEnter(GameObject food)
     {
         _foodPositions.Push(food.transform.position);
-        Debug.Log("Enterd food into stack");
     }
 
 
@@ -224,4 +243,14 @@ public class AnimalController : MonoBehaviour
         return GROWTHFACTOR / Dna.Chromosomes["Life"];
     }
 
+    private void RemoveListeners()
+    {
+        BodyCollider.OnHerbivoreContact = null;
+        SenseCollider.OnCarnivoreAnimalEnter = null;
+        SenseCollider.OnCarnivoreAnimalExit = null;
+        SenseCollider.OnFoodEnter = null;
+        SenseCollider.OnFoodExit = null;
+        SenseCollider.OnHerbivoreAnimalEnter = null;
+        SenseCollider.OnHerbivoreAnimalExit = null;
+    }
 }
