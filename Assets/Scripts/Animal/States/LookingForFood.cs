@@ -5,6 +5,7 @@ public class LookingForFoodState : AnimalState
     private Vector3 _targetPos = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
     private GameObject _foodObj;
     private bool _foundFood = false;
+    private bool _slowMove = false;
     public LookingForFoodState(AnimalController controller, AnimalDNA dna, GameObject animalObject) : base(controller, dna, animalObject)
     {
     }
@@ -26,6 +27,23 @@ public class LookingForFoodState : AnimalState
 
     public override void OnUpdate()
     {
+        if (controller.CurrentEnergy < dna.Chromosomes["Energy"] * .25f)
+        {
+            currentMovementSpeed = _baseMovementSpeed * 0.5f;
+            _slowMove = true;
+        }
+
+        if (_slowMove)
+        {
+            controller.ReplenishEnergy(50f);
+            controller.HungerConsumption(5f);
+            if (controller.CurrentEnergy >= dna.Chromosomes["Energy"] * .85f)
+            {
+                _slowMove = false;
+                currentMovementSpeed = _baseMovementSpeed;
+            }
+        }
+
         if (Utils.IsOnGround(_targetPos))
         {
             if (ArrivedAtTarget(_targetPos))
@@ -49,7 +67,8 @@ public class LookingForFoodState : AnimalState
             else
             {
                 WalkTowards(_targetPos);
-                controller.HungerConsumption(10);
+                if (!_slowMove)
+                    controller.HungerConsumption(10);
             }
 
         }

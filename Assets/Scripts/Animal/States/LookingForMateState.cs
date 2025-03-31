@@ -3,6 +3,7 @@ using UnityEngine;
 public class LookingForMateState : AnimalState
 {
     private Vector3 _newPos = Vector3.zero;
+    private bool _slowMove = false;
     public LookingForMateState(AnimalController controller, AnimalDNA dna, GameObject animalObject) : base(controller, dna, animalObject)
     {
     }
@@ -24,10 +25,29 @@ public class LookingForMateState : AnimalState
 
     public override void OnUpdate()
     {
+        if (controller.CurrentEnergy < dna.Chromosomes["Energy"] * .25f)
+        {
+            currentMovementSpeed = _baseMovementSpeed * 0.5f;
+            _slowMove = true;
+        }
+
+        if (_slowMove)
+        {
+            controller.ReplenishEnergy(50f);
+            controller.HungerConsumption(5f);
+            if (controller.CurrentEnergy >= dna.Chromosomes["Energy"] * .85f)
+            {
+                _slowMove = false;
+                currentMovementSpeed = _baseMovementSpeed;
+            }
+        }
+
         if (controller.MateOBJ != null)
         {
             WalkTowards(controller.MateOBJ.transform.position);
-            controller.HungerConsumption(10);
+            if (!_slowMove)
+                controller.HungerConsumption(10);
+
             if (ArrivedAtTarget(controller.MateOBJ.transform.position))
             {
                 controller.SwitchState(new MatingState(controller, dna, animalOBJ, controller.MateOBJ));
@@ -46,7 +66,8 @@ public class LookingForMateState : AnimalState
             else
             {
                 WalkTowards(_newPos);
-                controller.HungerConsumption(10);
+                if (!_slowMove)
+                    controller.HungerConsumption(10);
             }
 
         }
