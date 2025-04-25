@@ -320,7 +320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mutationChange: 50
-  _amountOfAnimals: 100
+  _amountOfAnimals: 25
   _amountOfCarnivoresToSpawn: 5
   _animalOBJ: {fileID: 2394900920410169446, guid: d222181c646673c4a9e9aacdcbae9800, type: 3}
   _minMaxLife: {x: 100, y: 300}
