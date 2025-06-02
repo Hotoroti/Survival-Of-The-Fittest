@@ -4,74 +4,95 @@ public class MatingState : AnimalState
 {
     private float _matingTimer;
     private AnimalController _mateController;
-    public MatingState(AnimalController controller, AnimalDNA dna, GameObject animalObject, AnimalController mateController) : base(controller, dna, animalObject)
+
+    public MatingState(AnimalController controller, AnimalDNA dna, GameObject animalObject, AnimalController mateController)
+        : base(controller, dna, animalObject)
     {
         _mateController = mateController;
     }
 
     public override void OnEnter()
     {
-
+        _matingTimer = 0f;
     }
 
-    public override void OnExit()
-    {
-    }
+    public override void OnExit() { }
 
     public override void OnUpdate()
     {
-        if (dna.Gender != 0)
-            return;
+        ReplenishDuringMating();
+        UpdateMatingTimer();
 
+        if (IsMatingTimeComplete())
+            CompleteMating();
+    }
+
+    /// <summary>
+    /// Handles replenishing eneergy during mating
+    /// </summary>
+    private void ReplenishDuringMating()
+    {
         controller.ReplenishEnergy(15f);
+    }
 
+    /// <summary>
+    /// Update the timer during mating
+    /// </summary>
+    private void UpdateMatingTimer()
+    {
         _matingTimer += TimeSettings.Instance.DeltaTime;
+    }
 
-        if (_matingTimer < Settings.Instance.MateTime)
-            return;
+    /// <summary>
+    /// Checks if the mating is complete
+    /// </summary>
+    /// <returns>True or false</returns>
+    private bool IsMatingTimeComplete()
+    {
+        return _matingTimer >= Settings.Instance.MateTime;
+    }
 
-        SpawnChild(_mateController);
+    /// <summary>
+    /// Handles the finishing of the mating
+    /// </summary>
+    private void CompleteMating()
+    {
+        if (IsFemale())
+            SpawnChild(_mateController);
 
         _mateController.HadMated();
         controller.HadMated();
     }
 
+    /// <summary>
+    /// Spawn the child with the correct values
+    /// </summary>
+    /// <param name="otherParent">The other parent of the child</param>
     private void SpawnChild(AnimalController otherParent)
     {
-        GameObject child = GameObject.Instantiate(Settings.Instance.AnimalObject, controller.transform.position, Quaternion.identity, Settings.Instance.AnimalParent.transform);
+        GameObject child = GameObject.Instantiate(
+            Settings.Instance.AnimalObject,
+            controller.transform.position,
+            Quaternion.identity,
+            Settings.Instance.AnimalParent.transform
+        );
 
         AnimalDNA childDna = child.GetComponent<AnimalDNA>();
-
         if (childDna == null)
         {
-            Debug.LogError("Child does not have DNA");
+            Debug.LogError("Child DNA component missing!");
             return;
         }
 
-        float lifeValue = Random.Range(0, 100) < 50 ? dna.Chromosomes["Life"] : otherParent.Dna.Chromosomes["Life"];
-        float speedValue = Random.Range(0, 100) < 50 ? dna.Chromosomes["WalkingSpeed"] : otherParent.Dna.Chromosomes["WalkingSpeed"];
-        float senseValue = Random.Range(0, 100) < 50 ? dna.Chromosomes["Sense"] : otherParent.Dna.Chromosomes["Sense"];
-        float energyValue = Random.Range(0, 100) < 50 ? dna.Chromosomes["Energy"] : otherParent.Dna.Chromosomes["Energy"];
+        float lifeValue = Utils.GetInheritedGene("Life", otherParent, controller);
+        float speedValue = Utils.GetInheritedGene("WalkingSpeed", otherParent, controller);
+        float senseValue = Utils.GetInheritedGene("Sense", otherParent, controller);
+        float energyValue = Utils.GetInheritedGene("Energy", otherParent, controller);
 
-        if (Random.Range(0, 100) < Settings.Instance.MutationChangeMax)
-        {
-            float mutationValue = Random.Range(0, 2) < 1 ? Settings.Instance.MutationMultiplier.x : Settings.Instance.MutationMultiplier.y;
-            switch (Random.Range(0, 4))
-            {
-                case 0:
-                    lifeValue *= mutationValue;
-                    break;
-                case 1:
-                    speedValue *= mutationValue;
-                    break;
-                case 2:
-                    senseValue *= mutationValue;
-                    break;
-                case 3:
-                    energyValue *= mutationValue;
-                    break;
-            }
-        }
+        Utils.ApplyRandomMutation(ref lifeValue, ref speedValue, ref senseValue, ref energyValue);
+
         childDna.SetChromosomes(lifeValue, speedValue, senseValue, energyValue, dna.Carnivore);
     }
+
+    protected override void GetNewPosition() { }
 }

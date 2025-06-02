@@ -25,9 +25,8 @@ public abstract class AnimalState
     }
 
     /// <summary>
-    /// Call this function so that the organism will walk towards a point
+    /// Moves the animal towards the target position.
     /// </summary>
-    /// <param name="target">The point the organism needs to walk to</param>
     protected void WalkTowards(Vector3 target)
     {
         animalOBJ.transform.position = Vector3.MoveTowards(animalOBJ.transform.position, target, currentMovementSpeed * TimeSettings.Instance.DeltaTime);
@@ -35,28 +34,68 @@ public abstract class AnimalState
         EnergyConsumption();
     }
 
+
+    protected abstract void GetNewPosition();
+
+
+    /// <summary>
+    /// Slows movement if energy is low.
+    /// </summary>
     protected void HandleLowEnergyMovement()
     {
-        if (controller.CurrentEnergy < dna.Chromosomes["Energy"] * .25f)
+        if (controller.CurrentEnergy < dna.Chromosomes["Energy"] * 0.25f)
         {
             currentMovementSpeed = _baseMovementSpeed * 0.5f;
             SlowMovement = true;
         }
     }
 
+    /// <summary>
+    /// Replenishes energy when moving slowly.
+    /// </summary>
     protected void ReplenishEnergyOnSlowMovement()
     {
         if (SlowMovement)
         {
             controller.ReplenishEnergy(50f);
             controller.HungerConsumption(5f);
-            if (controller.CurrentEnergy >= dna.Chromosomes["Energy"] * .85f)
+            if (controller.CurrentEnergy >= dna.Chromosomes["Energy"] * 0.85f)
             {
                 SlowMovement = false;
                 currentMovementSpeed = _baseMovementSpeed;
             }
         }
     }
+
+    /// <summary>
+    /// Moves toward target and consumes hunger.
+    /// </summary>
+    protected void WalkTowardsWithHungerConsumption(Vector3 target, float hungerAmount = 10f)
+    {
+        WalkTowards(target);
+        if (!SlowMovement)
+            controller.HungerConsumption(hungerAmount);
+    }
+
+
+    /// <summary>
+    /// Move towards target or get a new one if invalid or reached.
+    /// </summary>
+    protected void MoveTowardsTargetOrGetNewPosition(Vector3 targetPos)
+    {
+        if (Utils.IsOnGround(targetPos))
+        {
+            if (ArrivedAtTarget(targetPos))
+                GetNewPosition();
+            else
+                WalkTowardsWithHungerConsumption(targetPos);
+        }
+        else
+        {
+            GetNewPosition();
+        }
+    }
+
 
     /// <summary>
     /// Call this function to check if the organism has arrive at the target
@@ -76,6 +115,9 @@ public abstract class AnimalState
         controller.EnergyConsumption(energyConsumption);
     }
 
+    protected bool IsMale() => dna.Gender == 0;
+    protected bool IsFemale() => dna.Gender == 1;
+
     public virtual void OnTriggerEnter(Collider other)
     {
     }
@@ -94,4 +136,43 @@ public abstract class AnimalState
     /// Call this function when Exiting the state
     /// </summary>
     public abstract void OnExit();
+
+    /// <summary>
+    /// Checks if this animal can mate with the other.
+    /// </summary>
+    protected bool CanMateWith(AnimalController other)
+    {
+        if (other == null)
+        {
+            Debug.LogWarning("Mate candidate is null.");
+            return false;
+        }
+        if (other.IsDead)
+        {
+            Debug.Log("Mating rejected: Animal is dead.");
+            return false;
+        }
+        if (other.Dna.Carnivore != dna.Carnivore)
+        {
+            Debug.Log("Mating rejected: Different species type.");
+            return false;
+        }
+        if (other.Dna.Gender == dna.Gender)
+        {
+            Debug.Log("Mating rejected: Same gender.");
+            return false;
+        }
+        if (!other.HasMatured)
+        {
+            Debug.Log("Mating rejected: Partner not mature.");
+            return false;
+        }
+        if (other.MateOBJ != null && other.MateOBJ != controller)
+        {
+            Debug.Log("Mating rejected: Partner already has another mate.");
+            controller.MateOBJ = null;
+            return false;
+        }
+        return true;
+    }
 }

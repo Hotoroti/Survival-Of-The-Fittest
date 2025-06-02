@@ -174,16 +174,12 @@ public class HuntingState : AnimalState
         currentMovementSpeed = _baseMovementSpeed;
     }
 
-    /// <summary>
-    /// Call this function to get a new position depending on if it knows a position where food was or in the sense radius
-    /// </summary>
-    private void GetNewPosition()
+    protected override void GetNewPosition()
     {
         if (!_foundFood)
         {
             _targetPos = (animalOBJ.transform.position + Random.insideUnitSphere * dna.Chromosomes["Sense"]);
             _targetPos = new Vector3(_targetPos.x, 0.1f, _targetPos.z);
         }
-
     }
 }

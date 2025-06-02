@@ -53,4 +53,8 @@ public class EatingState : AnimalState
 
         GameObject.Destroy(_foodObj);
     }
+
+    protected override void GetNewPosition()
+    {
+    }
 }

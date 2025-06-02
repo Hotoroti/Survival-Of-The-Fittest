@@ -32,4 +32,8 @@ public class DeadState : AnimalState
             GameObject.Destroy(animalOBJ);
         }
     }
+
+    protected override void GetNewPosition()
+    {
+    }
 }

@@ -38,7 +38,7 @@ public class LookingForFoodState : AnimalState
             }
             else
             {
-                WalkTowardsFoodTarget();
+                WalkTowardsWithHungerConsumption(_targetPos);
             }
         }
         else
@@ -66,16 +66,6 @@ public class LookingForFoodState : AnimalState
         }
     }
 
-    private void WalkTowardsFoodTarget()
-    {
-        WalkTowards(_targetPos);
-
-        if (!SlowMovement)
-        {
-            controller.HungerConsumption(10f);
-        }
-    }
-
     private void HandleInvalidGroundTarget()
     {
         Debug.Log(Utils.IsOnGround(_targetPos));
@@ -96,10 +86,7 @@ public class LookingForFoodState : AnimalState
 
     }
 
-    /// <summary>
-    /// Call this function to get a new position depending on if it knows a position where food was or in the sense radius
-    /// </summary>
-    private void GetNewPosition()
+    protected override void GetNewPosition()
     {
         if (controller._foodPositions.Count <= 0)
         {
