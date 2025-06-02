@@ -51,6 +51,11 @@ public class AnimalDNA : MonoBehaviour
         Hunger = STARTHUNGER - (Chromosomes["Energy"] / 10f);
     }
 
+    public void SetGender(int gender)
+    {
+        Gender = gender;
+    }
+
     public void SetCarnivoreLevel(float level)
     {
         Carnivore = level;

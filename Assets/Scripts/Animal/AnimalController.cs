@@ -130,6 +130,9 @@ public class AnimalController : MonoBehaviour
     public void HadMated()
     {
         _currentMateRate = 0f;
+        if (this == null)
+            return;
+
         SwitchState(new RoamingState(this, Dna, gameObject));
     }
 
@@ -141,10 +144,12 @@ public class AnimalController : MonoBehaviour
         {
             if (MateOBJ != null)
             {
-                if (MateOBJ.MateOBJ != null)
+                if (MateOBJ.MateOBJ == this)
                 {
                     MateOBJ.MateOBJ = null;
                 }
+
+                MateOBJ = null;
             }
 
             IsDead = true;
@@ -232,6 +237,13 @@ public class AnimalController : MonoBehaviour
             HasMatured = true;
             TimeCycle.Instance.DayFinished.RemoveListener(Mature);
         }
+    }
+
+    public void MatureOrganisms()
+    {
+        transform.localScale = new Vector3(Dna.Size, Dna.Size, Dna.Size);
+        HasMatured = true;
+        TimeCycle.Instance.DayFinished.RemoveListener(Mature);
     }
 
     /// <summary>

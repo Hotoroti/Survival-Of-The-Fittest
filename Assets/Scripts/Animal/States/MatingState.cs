@@ -70,11 +70,14 @@ public class MatingState : AnimalState
     /// <param name="otherParent">The other parent of the child</param>
     private void SpawnChild(AnimalController otherParent)
     {
+        if (otherParent == null)
+            return;
+
         GameObject child = GameObject.Instantiate(
             Settings.Instance.AnimalObject,
             controller.transform.position,
             Quaternion.identity,
-            Settings.Instance.AnimalParent.transform
+            controller.transform.parent
         );
 
         AnimalDNA childDna = child.GetComponent<AnimalDNA>();

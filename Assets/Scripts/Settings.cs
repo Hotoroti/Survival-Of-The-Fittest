@@ -6,7 +6,7 @@ public class Settings : MonoBehaviour
 
     [SerializeField, Range(0, 100)] private int _mutationChange;
     [SerializeField] private int _amountOfAnimals;
-    [SerializeField] private int _amountOfCarnivoresToSpawn;
+    [SerializeField] private int _amountOfCarnivoresToSpawn, _amountOfHerbivoresToSpawn;
 
     [SerializeField] private GameObject _animalOBJ;
     [SerializeField, Tooltip("The start values for the first organisms that the random value will be in between")] private Vector2 _minMaxLife, _minMaxSpeed, _minMaxSense, _minMaxEnergy;
@@ -47,8 +47,9 @@ public class Settings : MonoBehaviour
 
         for (int i = 0; i < AmountOfAnimals; i++)
         {
-            AnimalDNA animalDNA = Instantiate(_animalOBJ, new Vector3(45, 0, 45), Quaternion.identity, AnimalParent.transform).GetComponent<AnimalDNA>();
-
+            GameObject animalObject = Instantiate(_animalOBJ, new Vector3(45, 0, 45), Quaternion.identity, AnimalParent.transform);
+            AnimalDNA animalDNA = animalObject.GetComponent<AnimalDNA>();
+            AnimalController controller = animalObject.GetComponent<AnimalController>();
             if (animalDNA == null)
             {
                 Debug.LogError("Can not set the animalDNA it does not exist");
@@ -61,15 +62,53 @@ public class Settings : MonoBehaviour
                 Random.Range(_minMaxSense.x, _minMaxSense.y),
                 Random.Range(_minMaxEnergy.x, _minMaxEnergy.y),
                 0);
+
+            controller.MatureOrganisms();
+        }
+    }
+
+    public void SpawnHerbivores()
+    {
+        int femalesSpawned = 0;
+        for (int i = 0; i < _amountOfHerbivoresToSpawn; i++)
+        {
+            GameObject animalObject = Instantiate(_animalOBJ, new Vector3(45, 0, 45), Quaternion.identity, AnimalParent.transform);
+            AnimalDNA animalDNA = animalObject.GetComponent<AnimalDNA>();
+            AnimalController controller = animalObject.GetComponent<AnimalController>();
+            if (animalDNA == null)
+            {
+                Debug.LogError("Can not set the animalDNA it does not exist");
+                return;
+            }
+
+            animalDNA.SetChromosomes(
+                Random.Range(_minMaxLife.x, _minMaxLife.y),
+                Random.Range(_minMaxSpeed.x, _minMaxSpeed.y),
+                Random.Range(_minMaxSense.x, _minMaxSense.y),
+                Random.Range(_minMaxEnergy.x, _minMaxEnergy.y),
+                0);
+
+            if (femalesSpawned <= _amountOfCarnivoresToSpawn / 2)
+            {
+                animalDNA.SetGender(0);
+                femalesSpawned++;
+            }
+            else
+                animalDNA.SetGender(1);
+
+            controller.MatureOrganisms();
         }
     }
 
 
     public void SpawnCarnivores()
     {
+        int femalesSpawned = 0;
         for (int i = 0; i < _amountOfCarnivoresToSpawn; i++)
         {
-            AnimalDNA animalDNA = Instantiate(_animalOBJ, new Vector3(45, 0, 45), Quaternion.identity, CarnivoreParent.transform).GetComponent<AnimalDNA>();
+            GameObject animalObject = Instantiate(_animalOBJ, new Vector3(45, 0, 45), Quaternion.identity, CarnivoreParent.transform);
+            AnimalDNA animalDNA = animalObject.GetComponent<AnimalDNA>();
+            AnimalController controller = animalObject.GetComponent<AnimalController>();
 
             if (animalDNA == null)
             {
@@ -83,6 +122,16 @@ public class Settings : MonoBehaviour
                 Random.Range(_minMaxSense.x, _minMaxSense.y),
                 Random.Range(_minMaxEnergy.x, _minMaxEnergy.y),
                 1);
+
+            if (femalesSpawned <= _amountOfCarnivoresToSpawn / 2)
+            {
+                animalDNA.SetGender(0);
+                femalesSpawned++;
+            }
+            else
+                animalDNA.SetGender(1);
+
+            controller.MatureOrganisms();
         }
     }
 }

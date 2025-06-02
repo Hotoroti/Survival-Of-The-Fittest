@@ -97,47 +97,34 @@ public class HuntingState : AnimalState
     {
         AnimalController tempPreyController = food.GetComponentInParent<AnimalController>();
 
-        //Check if the prey has a controller
+        // Abort if the prey has no controller
         if (tempPreyController == null)
             return;
-        //Check if it found food
+
+        // Abort if prey is too large to handle
+        bool preyTooLarge = tempPreyController.Dna.Size > dna.Size * 1.25f;
+        if (!tempPreyController.IsDead && preyTooLarge)
+            return;
+
+        // If we already have a food target
         if (_foundFood)
         {
-            //Check if it found a dead animal
-            if (tempPreyController.IsDead)
+            bool currentIsDead = _preyController?.IsDead ?? false;
+            bool newIsDead = tempPreyController.IsDead;
+
+            // Prefer larger dead prey if available
+            if (newIsDead)
             {
-                //Check if the dead animal is bigger then the old prey
-                if (_preyController.IsDead && _preyController.Dna.Size > tempPreyController.Dna.Size)
+                if (!currentIsDead || tempPreyController.Dna.Size >= _preyController.Dna.Size)
                 {
                     _preyController = tempPreyController;
                     _targetPos = food.transform.position;
-                    _foundFood = true;
                 }
-                else
-                {
-                    _preyController = tempPreyController;
-                    _targetPos = food.transform.position;
-                    _foundFood = true;
-                }
-
-                return;
             }
+
+            // Do not overwrite living prey if already found something
             return;
         }
-
-        //Check if the prey is dead
-        if (tempPreyController.IsDead)
-        {
-            _preyController = tempPreyController;
-            _targetPos = food.transform.position;
-            _foundFood = true;
-
-            return;
-        }
-
-        //Check if the prey is an amount larger then itself
-        if (tempPreyController.Dna.Size > dna.Size * 1.25f)
-            return;
 
         _preyController = tempPreyController;
         _targetPos = food.transform.position;

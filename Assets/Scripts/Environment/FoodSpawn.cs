@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FoodSpawn : MonoBehaviour
 {
-    [SerializeField] private float _foodGenerateTimeMin = 50, _foodGenerateTimeMax = 500;
+    [SerializeField] private float _foodGenerateTimeMinDays = 7, _foodGenerateTimeMaxDays = 21;
     [SerializeField] private float _foodSpawnRadius = 2;
 
     [SerializeField] private GameObject _foodObj = null;
@@ -33,7 +33,7 @@ public class FoodSpawn : MonoBehaviour
         if (validPos)
         {
             Instantiate(_foodObj, foodPos, Quaternion.identity, EnvironmentMaker.Instance.FoodParent.transform);
-            _foodGenerateTime = Random.Range(_foodGenerateTimeMin, _foodGenerateTimeMax);
+            _foodGenerateTime = Random.Range(_foodGenerateTimeMinDays, _foodGenerateTimeMaxDays);
         }
         else
         {
@@ -57,7 +57,7 @@ public class FoodSpawn : MonoBehaviour
         }
         else
         {
-            _foodGenerateTime = Random.Range(_foodGenerateTimeMin, _foodGenerateTimeMax);
+            _foodGenerateTime = Random.Range(_foodGenerateTimeMinDays, _foodGenerateTimeMaxDays);
         }
     }
 
@@ -65,7 +65,7 @@ public class FoodSpawn : MonoBehaviour
     {
         IncreaseTime();
 
-        if (_timeUntilSpawn >= _foodGenerateTime)
+        if (_timeUntilSpawn >= _foodGenerateTime * TimeCycle.Instance.SecondsInDay)
         {
             _timeUntilSpawn = 0;
             GenerateFood();
