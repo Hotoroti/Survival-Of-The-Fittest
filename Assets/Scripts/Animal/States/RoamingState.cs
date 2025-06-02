@@ -19,8 +19,12 @@ public class RoamingState : AnimalState
         if (controller.ReadyToMate)
             controller.SwitchState(new LookingForMateState(controller, dna, animalOBJ));
         else if (controller.HungerScore >= .66f)
-            controller.SwitchState(new LookingForFoodState(controller, dna, animalOBJ));
-
+        {
+            if (controller.Dna.Carnivore >= 1)
+                controller.SwitchState(new HuntingState(controller, dna, animalOBJ));
+            else
+                controller.SwitchState(new LookingForFoodState(controller, dna, animalOBJ));
+        }
 
         if (controller.CurrentEnergy < dna.Chromosomes["Energy"] * .25f)
         {

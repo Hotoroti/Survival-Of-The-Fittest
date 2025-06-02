@@ -43,11 +43,14 @@ public class AnimalController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (!_startMoving || IsDead)
+        if (!_startMoving)
             return;
 
         if (_currentState != null)
             _currentState.OnUpdate();
+
+        if (IsDead)
+            return;
 
         FitnessScore += TimeSettings.Instance.DeltaTime;
 
@@ -145,6 +148,7 @@ public class AnimalController : MonoBehaviour
             }
 
             IsDead = true;
+            SwitchState(new DeadState(this, Dna, gameObject));
             RemoveListeners();
         }
     }
@@ -198,16 +202,9 @@ public class AnimalController : MonoBehaviour
 
         _renderer.material.color = (traitColor * 0.7f + genderTint * 0.3f) * EatingTrait; // 70% trait, 30% gender influence
 
-        if (Dna.Carnivore >= 1)
-        {
-            BodyCollider.gameObject.tag = "CarnivoreAnimal";
-            SwitchState(new HuntingState(this, Dna, gameObject));
-        }
-        else
-        {
-            BodyCollider.gameObject.tag = "HerbivoreAnimal";
-            SwitchState(new RoamingState(this, Dna, gameObject));
-        }
+        BodyCollider.gameObject.tag = Dna.Carnivore >= 1 ? "CarnivoreAnimal" : "HerbivoreAnimal";
+
+        SwitchState(new RoamingState(this, Dna, gameObject));
 
         _startMoving = true;
         Dna.Initialise.RemoveListener(Initialise);
@@ -215,7 +212,10 @@ public class AnimalController : MonoBehaviour
 
     private void OnFoodEnter(GameObject food)
     {
-        _foodPositions.Push(food.transform.position);
+        if (Dna.Carnivore <= 0)
+        {
+            _foodPositions.Push(food.transform.position);
+        }
     }
 
 
@@ -252,5 +252,6 @@ public class AnimalController : MonoBehaviour
         SenseCollider.OnFoodExit = null;
         SenseCollider.OnHerbivoreAnimalEnter = null;
         SenseCollider.OnHerbivoreAnimalExit = null;
+        TimeCycle.Instance.DayFinished.RemoveListener(Mature);
     }
 }

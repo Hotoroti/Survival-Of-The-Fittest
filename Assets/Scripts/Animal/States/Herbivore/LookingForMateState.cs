@@ -14,13 +14,21 @@ public class LookingForMateState : AnimalState
         if (controller.MateOBJ == null)
         {
             GetNewPosition();
-            controller.SenseCollider.OnHerbivoreAnimalEnter += OnHerbivalAnimalEnter;
+            if (dna.Carnivore >= 1)
+                controller.SenseCollider.OnCarnivoreAnimalEnter += OnAnimalEnter;
+            else
+                controller.SenseCollider.OnHerbivoreAnimalEnter += OnAnimalEnter;
+
+
         }
     }
 
     public override void OnExit()
     {
-        controller.SenseCollider.OnHerbivoreAnimalEnter -= OnHerbivalAnimalEnter;
+        if (dna.Carnivore >= 1)
+            controller.SenseCollider.OnCarnivoreAnimalEnter -= OnAnimalEnter;
+        else
+            controller.SenseCollider.OnHerbivoreAnimalEnter -= OnAnimalEnter;
     }
 
     public override void OnUpdate()
@@ -84,28 +92,39 @@ public class LookingForMateState : AnimalState
         _newPos = new Vector3(_newPos.x, 0.1f, _newPos.z);
     }
 
-    private void OnHerbivalAnimalEnter(GameObject animal)
+    private void OnAnimalEnter(GameObject animal)
     {
         AnimalController otherAnimalController = animal.GetComponent<AnimalController>();
 
+        //Check if it has a controller
         if (otherAnimalController == null)
         {
             Debug.Log("Could not return AnimalController");
             return;
         }
 
+        //Check if it is the same animal
+        if (otherAnimalController.Dna.Carnivore != dna.Carnivore)
+        {
+            Debug.Log("Other type of animal as mate?");
+            return;
+        }
+
+        //Check if it is a different gender
         if (otherAnimalController.Dna.Gender == dna.Gender)
         {
             Debug.Log("Same Gender");
             return;
         }
 
+        //Check if the animal is matured
         if (!otherAnimalController.HasMatured)
         {
             Debug.Log("Was not yet mature");
             return;
         }
 
+        //Check if the animal already has a mate
         if (otherAnimalController.MateOBJ != null)
         {
             Debug.Log("Already has a Mate");

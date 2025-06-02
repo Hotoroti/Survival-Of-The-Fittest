@@ -13,8 +13,8 @@ public class HuntingState : AnimalState
 
     public override void OnEnter()
     {
-        controller.SenseCollider.OnHerbivoreAnimalEnter += OnFoodEnter;
-        controller.SenseCollider.OnHerbivoreAnimalExit += OnFoodExit;
+        controller.SenseCollider.OnHerbivoreAnimalEnter += OnPreyEnter;
+        controller.SenseCollider.OnHerbivoreAnimalExit += OnPreyExit;
         controller.BodyCollider.OnHerbivoreContact += OnBodyEnter;
         controller.BodyCollider.OnHerbivoreExit += OnBodyExit;
 
@@ -23,70 +23,27 @@ public class HuntingState : AnimalState
 
     public override void OnExit()
     {
-        controller.SenseCollider.OnHerbivoreAnimalEnter -= OnFoodEnter;
-        controller.SenseCollider.OnHerbivoreAnimalExit -= OnFoodExit;
+        controller.SenseCollider.OnHerbivoreAnimalEnter -= OnPreyEnter;
+        controller.SenseCollider.OnHerbivoreAnimalExit -= OnPreyExit;
         controller.BodyCollider.OnHerbivoreContact -= OnBodyEnter;
         controller.BodyCollider.OnHerbivoreExit -= OnBodyExit;
     }
 
     public override void OnUpdate()
     {
-        if (controller.CurrentEnergy < dna.Chromosomes["Energy"] * .25f)
-        {
-            currentMovementSpeed = _baseMovementSpeed * 0.5f;
-            _slowMove = true;
-        }
-
-        if (_slowMove)
-        {
-            controller.ReplenishEnergy(50f);
-            controller.HungerConsumption(5f);
-            if (controller.CurrentEnergy >= dna.Chromosomes["Energy"] * .85f)
-            {
-                _slowMove = false;
-                currentMovementSpeed = _baseMovementSpeed;
-            }
-        }
+        HandleLowEnergyMovement();
+        ReplenishEnergyOnSlowMovement();
 
         if (Utils.IsOnGround(_targetPos))
         {
             if (_preyController == null)
             {
-                if (ArrivedAtTarget(_targetPos))
-                {
-                    GetNewPosition();
-                    Debug.Log("New Random Pos");
-                    return;
-                }
-                else
-                {
-                    WalkTowards(_targetPos);
-                    if (!_slowMove)
-                        controller.HungerConsumption(10);
-                }
+                HandleWandering();
             }
             else
             {
-                if (_preyController.IsDead)
-                {
-                    WalkTowards(_preyController.gameObject.transform.position);
-                    if (!_slowMove)
-                        controller.HungerConsumption(10);
-
-                    if (ArrivedAtTarget(_preyController.gameObject.transform.position))
-                    {
-                        controller.SwitchState(new EatingState(controller, dna, animalOBJ, _preyController.gameObject));
-                    }
-                }
-                else
-                {
-                    WalkTowards(_preyController.gameObject.transform.position);
-                    Debug.Log("Hunting");
-                    if (!_slowMove)
-                        controller.HungerConsumption(10f);
-                }
+                HandleHunting();
             }
-
         }
         else
         {
@@ -94,32 +51,109 @@ public class HuntingState : AnimalState
         }
     }
 
-    private void OnFoodEnter(GameObject food)
+    private void HandleWandering()
     {
+        if (ArrivedAtTarget(_targetPos))
+        {
+            GetNewPosition();
+            return;
+        }
+
+        WalkTowards(_targetPos);
+        if (!SlowMovement)
+        {
+            controller.HungerConsumption(10f);
+        }
+    }
+
+    private void HandleHunting()
+    {
+        Vector3 preyPosition = _preyController.gameObject.transform.position;
+
+        if (_preyController.IsDead)
+        {
+            WalkTowards(preyPosition);
+            if (!_slowMove)
+            {
+                controller.HungerConsumption(10f);
+            }
+
+            if (ArrivedAtTarget(preyPosition))
+            {
+                controller.SwitchState(new EatingState(controller, dna, animalOBJ, _preyController.gameObject));
+            }
+        }
+        else
+        {
+            WalkTowards(preyPosition);
+            if (!_slowMove)
+            {
+                controller.HungerConsumption(10f);
+            }
+        }
+    }
+
+    private void OnPreyEnter(GameObject food)
+    {
+        AnimalController tempPreyController = food.GetComponentInParent<AnimalController>();
+
+        //Check if the prey has a controller
+        if (tempPreyController == null)
+            return;
+        //Check if it found food
         if (_foundFood)
+        {
+            //Check if it found a dead animal
+            if (tempPreyController.IsDead)
+            {
+                //Check if the dead animal is bigger then the old prey
+                if (_preyController.IsDead && _preyController.Dna.Size > tempPreyController.Dna.Size)
+                {
+                    _preyController = tempPreyController;
+                    _targetPos = food.transform.position;
+                    _foundFood = true;
+                }
+                else
+                {
+                    _preyController = tempPreyController;
+                    _targetPos = food.transform.position;
+                    _foundFood = true;
+                }
+
+                return;
+            }
+            return;
+        }
+
+        //Check if the prey is dead
+        if (tempPreyController.IsDead)
+        {
+            _preyController = tempPreyController;
+            _targetPos = food.transform.position;
+            _foundFood = true;
+
+            return;
+        }
+
+        //Check if the prey is an amount larger then itself
+        if (tempPreyController.Dna.Size > dna.Size * 1.25f)
             return;
 
-        AnimalController foodController = food.GetComponentInParent<AnimalController>();
-
-        if (foodController == null)
-            return;
-
-        if (foodController.Dna.Size > dna.Size * 1.25f)
-            return;
-
-        _preyController = foodController;
+        _preyController = tempPreyController;
         _targetPos = food.transform.position;
         _foundFood = true;
     }
 
-    private void OnFoodExit(GameObject food)
+    private void OnPreyExit(GameObject prey)
     {
-        if (food == null)
+        if (prey == null)
             return;
 
-
-        if (food != _preyController?.gameObject)
-            return;
+        if (_preyController != null)
+        {
+            if (prey != _preyController.gameObject)
+                return;
+        }
 
         _preyController = null;
         _foundFood = false;

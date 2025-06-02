@@ -22,6 +22,7 @@ public class MatingState : AnimalState
     {
         if (dna.Gender != 0)
             return;
+
         controller.ReplenishEnergy(15f);
 
         _matingTimer += TimeSettings.Instance.DeltaTime;
@@ -71,7 +72,6 @@ public class MatingState : AnimalState
                     break;
             }
         }
-
         childDna.SetChromosomes(lifeValue, speedValue, senseValue, energyValue, dna.Carnivore);
     }
 }

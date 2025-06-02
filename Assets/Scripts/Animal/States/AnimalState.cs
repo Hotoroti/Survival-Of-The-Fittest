@@ -10,6 +10,8 @@ public abstract class AnimalState
     protected readonly float _baseMovementSpeed;
     protected float currentMovementSpeed;
 
+    protected bool SlowMovement { private set; get; }
+
     public AnimalState(AnimalController controller,
         AnimalDNA dna,
         GameObject animalObject) : base()
@@ -31,6 +33,29 @@ public abstract class AnimalState
         animalOBJ.transform.position = Vector3.MoveTowards(animalOBJ.transform.position, target, currentMovementSpeed * TimeSettings.Instance.DeltaTime);
         animalOBJ.transform.LookAt(target);
         EnergyConsumption();
+    }
+
+    protected void HandleLowEnergyMovement()
+    {
+        if (controller.CurrentEnergy < dna.Chromosomes["Energy"] * .25f)
+        {
+            currentMovementSpeed = _baseMovementSpeed * 0.5f;
+            SlowMovement = true;
+        }
+    }
+
+    protected void ReplenishEnergyOnSlowMovement()
+    {
+        if (SlowMovement)
+        {
+            controller.ReplenishEnergy(50f);
+            controller.HungerConsumption(5f);
+            if (controller.CurrentEnergy >= dna.Chromosomes["Energy"] * .85f)
+            {
+                SlowMovement = false;
+                currentMovementSpeed = _baseMovementSpeed;
+            }
+        }
     }
 
     /// <summary>
