@@ -27,56 +27,59 @@ public class LookingForFoodState : AnimalState
 
     public override void OnUpdate()
     {
-        if (controller.CurrentEnergy < dna.Chromosomes["Energy"] * .25f)
-        {
-            currentMovementSpeed = _baseMovementSpeed * 0.5f;
-            _slowMove = true;
-        }
-
-        if (_slowMove)
-        {
-            controller.ReplenishEnergy(50f);
-            controller.HungerConsumption(5f);
-            if (controller.CurrentEnergy >= dna.Chromosomes["Energy"] * .85f)
-            {
-                _slowMove = false;
-                currentMovementSpeed = _baseMovementSpeed;
-            }
-        }
+        HandleLowEnergyMovement();
+        ReplenishEnergyOnSlowMovement();
 
         if (Utils.IsOnGround(_targetPos))
         {
             if (ArrivedAtTarget(_targetPos))
             {
-                if (_foundFood)
-                {
-                    if (_foodObj.gameObject != null)
-                    {
-                        controller.SwitchState(new EatingState(controller, dna, animalOBJ, _foodObj));
-                    }
-                    else
-                    {
-                        GetNewPosition();
-                    }
-                }
-                else
-                {
-                    GetNewPosition();
-                }
+                HandleFoodArrival();
             }
             else
             {
-                WalkTowards(_targetPos);
-                if (!_slowMove)
-                    controller.HungerConsumption(10);
+                WalkTowardsFoodTarget();
             }
-
         }
         else
         {
-            Debug.Log(Utils.IsOnGround(_targetPos));
+            HandleInvalidGroundTarget();
+        }
+    }
+
+    private void HandleFoodArrival()
+    {
+        if (_foundFood)
+        {
+            if (_foodObj != null && _foodObj.gameObject != null)
+            {
+                controller.SwitchState(new EatingState(controller, dna, animalOBJ, _foodObj));
+            }
+            else
+            {
+                GetNewPosition();
+            }
+        }
+        else
+        {
             GetNewPosition();
         }
+    }
+
+    private void WalkTowardsFoodTarget()
+    {
+        WalkTowards(_targetPos);
+
+        if (!SlowMovement)
+        {
+            controller.HungerConsumption(10f);
+        }
+    }
+
+    private void HandleInvalidGroundTarget()
+    {
+        Debug.Log(Utils.IsOnGround(_targetPos));
+        GetNewPosition();
     }
 
     public void OnFoodEnter(GameObject food)

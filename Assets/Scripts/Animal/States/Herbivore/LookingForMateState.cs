@@ -33,35 +33,12 @@ public class LookingForMateState : AnimalState
 
     public override void OnUpdate()
     {
-        if (controller.CurrentEnergy < dna.Chromosomes["Energy"] * .25f)
-        {
-            currentMovementSpeed = _baseMovementSpeed * 0.5f;
-            _slowMove = true;
-        }
-
-        if (_slowMove)
-        {
-            controller.ReplenishEnergy(50f);
-            controller.HungerConsumption(5f);
-            if (controller.CurrentEnergy >= dna.Chromosomes["Energy"] * .85f)
-            {
-                _slowMove = false;
-                currentMovementSpeed = _baseMovementSpeed;
-            }
-        }
+        HandleLowEnergyMovement();
+        ReplenishEnergyOnSlowMovement();
 
         if (controller.MateOBJ != null)
         {
-            WalkTowards(controller.MateOBJ.transform.position);
-            if (!_slowMove)
-                controller.HungerConsumption(10);
-
-            if (ArrivedAtTarget(controller.MateOBJ.transform.position))
-            {
-                controller.SwitchState(new MatingState(controller, dna, animalOBJ, controller.MateOBJ));
-            }
-
-            _newPos = controller.MateOBJ.transform.position;
+            HandleMatingApproach();
             return;
         }
 
@@ -73,14 +50,42 @@ public class LookingForMateState : AnimalState
             }
             else
             {
-                WalkTowards(_newPos);
-                if (!_slowMove)
-                    controller.HungerConsumption(10);
+                WalkTowardsIdleTarget();
             }
-
         }
         else
+        {
             GetNewPosition();
+        }
+    }
+
+    private void HandleMatingApproach()
+    {
+        Vector3 matePosition = controller.MateOBJ.transform.position;
+
+        WalkTowards(matePosition);
+
+        if (!SlowMovement)
+        {
+            controller.HungerConsumption(10f);
+        }
+
+        if (ArrivedAtTarget(matePosition))
+        {
+            controller.SwitchState(new MatingState(controller, dna, animalOBJ, controller.MateOBJ));
+        }
+
+        _newPos = matePosition;
+    }
+
+    void WalkTowardsIdleTarget()
+    {
+        WalkTowards(_newPos);
+
+        if (!SlowMovement)
+        {
+            controller.HungerConsumption(10f);
+        }
     }
 
     /// <summary>
@@ -94,50 +99,65 @@ public class LookingForMateState : AnimalState
 
     private void OnAnimalEnter(GameObject animal)
     {
-        AnimalController otherAnimalController = animal.GetComponent<AnimalController>();
-
-        //Check if it has a controller
-        if (otherAnimalController == null)
+        // Null check
+        if (animal == null)
         {
-            Debug.Log("Could not return AnimalController");
+            Debug.LogWarning("Animal GameObject is null.");
             return;
         }
 
-        //Check if it is the same animal
-        if (otherAnimalController.Dna.Carnivore != dna.Carnivore)
+        // Get the controller
+        AnimalController other = animal.GetComponent<AnimalController>();
+        if (other == null)
         {
-            Debug.Log("Other type of animal as mate?");
+            Debug.LogWarning("No AnimalController found on target.");
             return;
         }
 
-        //Check if it is a different gender
-        if (otherAnimalController.Dna.Gender == dna.Gender)
+        //Don't mate with dead animal
+        if (other.IsDead)
         {
-            Debug.Log("Same Gender");
+            Debug.Log("Mating rejected: Animal is dead.");
             return;
         }
 
-        //Check if the animal is matured
-        if (!otherAnimalController.HasMatured)
+        // Don't mate with different species (e.g., herbivore vs carnivore)
+        if (other.Dna.Carnivore != dna.Carnivore)
         {
-            Debug.Log("Was not yet mature");
+            Debug.Log("Mating rejected: Different species type.");
             return;
         }
 
-        //Check if the animal already has a mate
-        if (otherAnimalController.MateOBJ != null)
+        // Don't mate with the same gender
+        if (other.Dna.Gender == dna.Gender)
         {
-            Debug.Log("Already has a Mate");
-            if (otherAnimalController.MateOBJ != animalOBJ)
+            Debug.Log("Mating rejected: Same gender.");
+            return;
+        }
+
+        // Must be mature
+        if (!other.HasMatured)
+        {
+            Debug.Log("Mating rejected: Partner not mature.");
+            return;
+        }
+
+        // Check if already has a mate
+        if (other.MateOBJ != null)
+        {
+            // If it's not already paired with this animal, cancel this attempt
+            if (other.MateOBJ != controller)
             {
+                Debug.Log("Mating rejected: Partner already has another mate.");
                 controller.MateOBJ = null;
             }
             return;
         }
 
-        controller.MateOBJ = otherAnimalController;
-        otherAnimalController.MateOBJ = controller;
-        Debug.Log("Found Mate");
+        // Assign mates mutually
+        controller.MateOBJ = other;
+        other.MateOBJ = controller;
+
     }
 
 }
